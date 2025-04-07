@@ -9,7 +9,7 @@ trait ApiResponseTrait
     public function sendSuccess($data, $message, $code = 200): JsonResponse
     {
         return response()->json([
-            'success' => true,
+            'status' => 1,
             'data' => $data,
             'message' => $message,
         ], $code);
@@ -17,7 +17,7 @@ trait ApiResponseTrait
     public function sendError($message, $code = 500): JsonResponse
     {
         return response()->json([
-            'success' => false,
+            'status' => 0,
             'data' => [],
             'message' => $message,
         ], $code);
@@ -26,7 +26,7 @@ trait ApiResponseTrait
     public function sendValidationError($message, $code = 422): JsonResponse
     {
         return response()->json([
-            'success' => false,
+            'success' => 0,
             'data' => [],
             'message' => $message,
         ], $code);
