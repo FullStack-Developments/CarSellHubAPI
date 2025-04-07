@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -43,6 +44,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function generateUserName($firstName, $lastName): string
+    {
+        $userNameBase = Str::slug($firstName . ' ' . $lastName);
+        $username = $userNameBase . '.'. rand(1,100000);
+        while (User::query()->where('username', $username)->exists()) {
+            $username = $userNameBase . '.'. rand(1,100000);
+        }
+
+        return $username;
+    }
 
     public function ads(): HasMany{
         return $this->hasMany(Ad::class);

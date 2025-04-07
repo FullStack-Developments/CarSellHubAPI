@@ -13,11 +13,11 @@ class RolesPermissionsSeeder extends Seeder
     #[NoReturn] public function run(): void
     {
         $adminRole = Role::create(['name' => 'admin']);
-//        $sellerRole = Role::create(['name' => 'seller']);
-//        $clientRole = Role::create(['name' => 'client']);
+        $sellerRole = Role::create(['name' => 'seller']);
+        $clientRole = Role::create(['name' => 'client']);
 
         $permissions = [
-            'create', 'read', 'update', 'delete'
+            'add-cars', 'index-cars', 'update-cars', 'delete-cars'
         ];
 
         foreach ($permissions as $permission) {
@@ -26,13 +26,11 @@ class RolesPermissionsSeeder extends Seeder
 
         $adminRole->syncPermissions($permissions);
 
-//        $sellerRole->givePermissionTo(['create', 'update', 'read']);
-//        $clientRole->givePermissionTo(['read']);
+        $sellerRole->givePermissionTo(['add-cars', 'update-cars', 'index-cars']);
+        $clientRole->givePermissionTo(['index-cars']);
 
         $adminUser = User::factory()->create([
                 'username' => 'admin',
-//                'first_name' => 'Admin',
-//                'last_name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'phone_number' => '123456789',
                 'password' => bcrypt('root')
@@ -43,26 +41,24 @@ class RolesPermissionsSeeder extends Seeder
         $adminPermission = $adminRole->permissions()->pluck('name')->toArray();
         $adminUser->givePermissionTo($adminPermission);
 
-//==========================================================================
+        //==========================================================================
+        //        $sellerUser = User::factory()->create([
+        //            'name' => 'Seller User',
+        //            'email' => 'seller@seller.com',
+        //            'password' => bcrypt('12345')
+        //        ]);
+        //        $sellerUser->assignRole($sellerRole);
+        //        $sellerPermission = $sellerRole->permissions()->pluck('name')->toArray();
+        //        $sellerUser->givePermissionTo($sellerPermission);
 
-//        $sellerUser = User::factory()->create([
-//            'name' => 'Seller User',
-//            'email' => 'seller@seller.com',
-//            'password' => bcrypt('12345')
-//        ]);
-//        $sellerUser->assignRole($sellerRole);
-//        $sellerPermission = $sellerRole->permissions()->pluck('name')->toArray();
-//        $sellerUser->givePermissionTo($sellerPermission);
-//==========================================================================
-
-//        $clientUser = User::factory()->create([
-//            'name' => 'Client User',
-//            'email' => 'client@client.com',
-//            'password' => bcrypt('12345')
-//        ]);
-//        $clientUser->assignRole($clientRole);
-//        $clientPermission = $clientRole->permissions()->pluck('name')->toArray();
-//        $clientUser->givePermissionTo($clientPermission);
-
+        //==========================================================================
+        //        $clientUser = User::factory()->create([
+        //            'name' => 'Client User',
+        //            'email' => 'client@client.com',
+        //            'password' => bcrypt('12345')
+        //        ]);
+        //        $clientUser->assignRole($clientRole);
+        //        $clientPermission = $clientRole->permissions()->pluck('name')->toArray();
+        //        $clientUser->givePermissionTo($clientPermission);
     }
 }
