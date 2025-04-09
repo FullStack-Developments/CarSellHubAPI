@@ -33,7 +33,7 @@ class RolesPermissionsSeeder extends Seeder
                 'username' => 'admin',
                 'email' => 'admin@admin.com',
                 'phone_number' => '123456789',
-                'password' => bcrypt('root')
+                'password' => bcrypt('rootadmin')
             ]);
 
         $adminUser->assignRole('admin');

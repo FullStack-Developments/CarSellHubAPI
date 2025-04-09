@@ -7,7 +7,6 @@ use App\Exceptions\UnauthorizedUserException;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserService
@@ -33,7 +32,7 @@ class UserService
             'last_name' => $request['last_name'],
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
-            'password' => Hash::make($request['password']),
+            'password' => bcrypt($request['password']),
             'picture_profile' => $photo ?? $request['picture_profile'],
             'address' => $request['address'],
         ]);
@@ -75,14 +74,16 @@ class UserService
         ) ? 'email' : 'username';
 
         $user = User::query()
-            ->where($identifier, $request->input('email_or_username'))
+            ->where($identifier, $request['email_or_username'])
             ->first();
-
         if(is_null($user)){
             throw new NotFoundUserException("User $identifier not found.");
         }
         else{
-            if(!Auth::attempt($request->only($identifier, 'password'))){
+            if(!Auth::attempt([
+                    $identifier => $request->input('email_or_username'),
+                    'password' => $request->input('password')
+            ])){
                 throw new UnauthorizedUserException("User $identifier & password does not match with our record.");
             }
             else{
