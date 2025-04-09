@@ -7,7 +7,9 @@ use App\Exceptions\UnauthorizedUserException;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserService
 {
@@ -64,8 +66,10 @@ class UserService
     }
 
     /**
-     * @throws NotFoundUserException
-     * @throws UnauthorizedUserException
+     * @param $request
+     * @return array
+     * @throws NotFoundHttpException
+     * @throws UnauthorizedException
      */
     public function loginUser($request): array{
         $identifier = filter_var(
@@ -77,20 +81,20 @@ class UserService
             ->where($identifier, $request['email_or_username'])
             ->first();
         if(is_null($user)){
-            throw new NotFoundUserException("User $identifier not found.");
+            throw new NotFoundHttpException("User $identifier not found.");
         }
         else{
             if(!Auth::attempt([
                     $identifier => $request->input('email_or_username'),
                     'password' => $request->input('password')
             ])){
-                throw new UnauthorizedUserException("User $identifier & password does not match with our record.");
+                throw new UnauthorizedException("User $identifier & password does not match with our record.");
             }
             else{
                 $user = $this->appendRolesAndPermissions($user);
                 $data['user'] = $user;
                 $data['token'] = $user->createToken('token')->plainTextToken;
-                $message = 'User Login Successfully!';
+                $message = 'User Logged In Successfully!';
                 $code = 200;
             }
         }
@@ -98,6 +102,16 @@ class UserService
             'data' => $data,
             'message' => $message,
             'code' => $code,
+        ];
+    }
+
+    public function logoutUser(): array{
+        $user = request()->user();
+        $user->tokens()->delete();
+        $message = 'User Logged Out Successfully!';
+        return [
+            'data' => [],
+            'message' => $message,
         ];
     }
 

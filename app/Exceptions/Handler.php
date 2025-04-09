@@ -3,12 +3,16 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,22 +50,40 @@ class Handler extends ExceptionHandler
     {
         Log::error($e);
 
+        if($e instanceof MethodNotAllowedHttpException) {
+            return $this->sendError($e->getMessage());
+        }
+
         if($request->expectsJson()){
+            if($e instanceof QueryException){
+                $status_code =
+                    Response::HTTP_INTERNAL_SERVER_ERROR;
+                return $this->sendError(
+                    'Could not execute query',
+                    $status_code
+                );
+
+            }
+
             if($e instanceof ValidationException){
                 $status_code = Response::HTTP_UNPROCESSABLE_ENTITY;
                 return $this->sendValidationError($e->errors(), $status_code);
             }
 
-            if($e instanceof NotFoundUserException){
+            if($e instanceof NotFoundHttpException){
                 $status_code = Response::HTTP_NOT_FOUND;
                 return $this->sendError($e->getMessage(), $status_code);
             }
 
-            if($e instanceof UnauthorizedUserException){
+            if($e instanceof UnauthorizedException){
                 $status_code = Response::HTTP_UNAUTHORIZED;
                 return $this->sendError($e->getMessage(), $status_code);
             }
 
+            if($e instanceof AuthenticationException){
+                $status_code = Response::HTTP_UNAUTHORIZED;
+                return $this->sendError('Unauthenticated or Token Expired, please try to login again', $status_code);
+            }
         }
 
         return parent::render($request, $e);
