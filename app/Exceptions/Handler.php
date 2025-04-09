@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -84,6 +85,11 @@ class Handler extends ExceptionHandler
             if($e instanceof BadRequestException){
                 $status_code = Response::HTTP_BAD_REQUEST;
                 return $this->sendError($e->getMessage(), $status_code);
+            }
+
+            if($e instanceof TooManyRequestsHttpException){
+                $status_code = Response::HTTP_TOO_MANY_REQUESTS;
+                return $this->sendError('Too many requests, please try later', $status_code);
             }
         }
 

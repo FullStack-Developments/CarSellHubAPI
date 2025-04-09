@@ -18,7 +18,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::controller(EmailVerificationController::class)
         ->group(function (){
             Route::post('verify-email', 'verifyEmail');
-            Route::middleware('auth:sanctum')
+            Route::middleware(['auth:sanctum', 'throttle:resend-code'])
                 ->group(function () {
                     Route::post('resend-code', 'resendVerificationEmail');
                 });
