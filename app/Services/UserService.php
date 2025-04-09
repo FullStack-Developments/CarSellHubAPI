@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundUserException;
-use App\Exceptions\UnauthorizedUserException;
+use App\Events\RegisterUserEvent;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
+use App\Traits\OtpTokenTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Spatie\Permission\Models\Role;
@@ -13,7 +13,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserService
 {
-    use ManageFilesTrait;
+    use ManageFilesTrait, OtpTokenTrait;
+
     /**
      * @param $request
      * @return array
@@ -52,6 +53,8 @@ class UserService
 
         $user = User::query()->find($user['id']);
         $user = $this->appendRolesAndPermissions($user);
+
+        event(new RegisterUserEvent($user));
 
         $data = [];
         $data['user'] = $user;
