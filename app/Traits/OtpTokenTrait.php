@@ -10,7 +10,7 @@ trait OtpTokenTrait
     {
         $otp = mt_rand(100000, 999999);
         $cache = Cache::store('database');
-        $cache->put(request()->ip(), [$email, $otp], now()->addMinutes($validate_token));
+        $cache->put(request()->ip(), [$email, $otp], now()->addMinutes($validate_token + 2));
         return $otp;
     }
 }

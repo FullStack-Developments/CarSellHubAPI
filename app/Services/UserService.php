@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
-use App\Events\RegisterUserEvent;
+use App\Events\VerifiedEmailEvent;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use App\Traits\OtpTokenTrait;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 use Spatie\Permission\Models\Role;
@@ -54,7 +55,7 @@ class UserService
         $user = User::query()->find($user['id']);
         $user = $this->appendRolesAndPermissions($user);
 
-        event(new RegisterUserEvent($user));
+        event(new VerifiedEmailEvent($user));
 
         $data = [];
         $data['user'] = $user;
@@ -108,9 +109,13 @@ class UserService
         ];
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function logoutUser(): array{
         $user = request()->user();
         $user->tokens()->delete();
+
         $message = 'User Logged Out Successfully!';
         return [
             'data' => [],

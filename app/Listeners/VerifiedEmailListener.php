@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\RegisterUserEvent;
+use App\Events\VerifiedEmailEvent;
 use App\Jobs\SendEmailVerification;
 use App\Notifications\EmailVerificationNotification;
 use App\Traits\OtpTokenTrait;
@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use JetBrains\PhpStorm\NoReturn;
 
-class RegisterUserListener
+class VerifiedEmailListener
 {
     use OtpTokenTrait;
     /**
@@ -24,7 +24,7 @@ class RegisterUserListener
     /**
      * Handle the event.
      */
-    public function handle(RegisterUserEvent $event): void
+    public function handle(VerifiedEmailEvent $event): void
     {
         $otp = $this->generateOtpToken($event->user['email']);
         SendEmailVerification::dispatch($event->user, $otp);

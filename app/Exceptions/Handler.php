@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -56,13 +57,8 @@ class Handler extends ExceptionHandler
 
         if($request->expectsJson()){
             if($e instanceof QueryException){
-                $status_code =
-                    Response::HTTP_INTERNAL_SERVER_ERROR;
-                return $this->sendError(
-                    'Could not execute query',
-                    $status_code
-                );
-
+                $status_code =  Response::HTTP_INTERNAL_SERVER_ERROR;
+                return $this->sendError('Could not execute query', $status_code);
             }
 
             if($e instanceof ValidationException){
@@ -83,6 +79,11 @@ class Handler extends ExceptionHandler
             if($e instanceof AuthenticationException){
                 $status_code = Response::HTTP_UNAUTHORIZED;
                 return $this->sendError('Unauthenticated or Token Expired, please try to login again', $status_code);
+            }
+
+            if($e instanceof BadRequestException){
+                $status_code = Response::HTTP_BAD_REQUEST;
+                return $this->sendError($e->getMessage(), $status_code);
             }
         }
 
