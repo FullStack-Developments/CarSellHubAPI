@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginUserRequest;
+use App\Http\Requests\RegisterUserRequest;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 
@@ -10,7 +11,7 @@ class AuthenticatedController extends Controller
 {
     public function __construct(private readonly UserService $userService){}
 
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(RegisterUserRequest $request): JsonResponse
     {
         $request->validated();
         $response = $this->userService->createUser($request);
@@ -18,6 +19,16 @@ class AuthenticatedController extends Controller
             $response['data'],
             $response['message'],
             201
+        );
+    }
+
+    public function login(LoginUserRequest $request): JsonResponse{
+        $request->validated();
+        $response = $this->userService->loginUser($request);
+        return $this->sendSuccess(
+            $response['data'],
+            $response['message'],
+            $response['code']
         );
     }
 }

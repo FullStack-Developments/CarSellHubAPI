@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class RegisterUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class RegisterRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:45', 'min:3'],
             'last_name' => ['required', 'string', 'max:45', 'min:3'],
-            'email' => ['required', 'string', 'email', 'max:45', 'unique:users,email'],
+            'email' => ['required', 'string', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
             'phone_number' => ['required', 'digits:10', 'regex:/^([0-9\s\-\+\(\)]*)$/'],
             'picture_profile' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],

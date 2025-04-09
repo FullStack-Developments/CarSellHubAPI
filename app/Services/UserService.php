@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserService
@@ -29,7 +31,7 @@ class UserService
             'last_name' => $request['last_name'],
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
-            'password' => bcrypt($request['password']),
+            'password' => Hash::make($request['password']),
             'picture_profile' => $photo ?? $request['picture_profile'],
             'address' => $request['address'],
         ]);
@@ -60,6 +62,41 @@ class UserService
         ];
     }
 
+    public function loginUser($request): array{
+        $identifier = filter_var(
+            $request->input('email_or_username'),
+            FILTER_VALIDATE_EMAIL
+        ) ? 'email' : 'username';
+
+        $user = User::query()
+            ->where($identifier, $request->input('email_or_username'))
+            ->first();
+
+        if(!is_null($user)){
+            if(!Auth::attempt($request->only($identifier, 'password'))){
+                $data = [];
+                $message = "User $identifier & password does not match with our record.";
+                $code = 401;
+            }
+            else{
+                $user = $this->appendRolesAndPermissions($user);
+                $data['user'] = $user;
+                $data['token'] = $user->createToken('token')->plainTextToken;
+                $message = 'User Login Successfully!';
+                $code = 200;
+            }
+        }else{
+            $data = [];
+            $message = "User $identifier not found.";
+            $code = 404;
+        }
+        return [
+            'data' => $data,
+            'message' => $message,
+            'code' => $code,
+        ];
+    }
+
     /**
      * @param $user
      * @return mixed
@@ -82,4 +119,5 @@ class UserService
 
         return $user;
     }
+
 }
