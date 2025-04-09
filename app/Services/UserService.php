@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundUserException;
+use App\Exceptions\UnauthorizedUserException;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +64,10 @@ class UserService
         ];
     }
 
+    /**
+     * @throws NotFoundUserException
+     * @throws UnauthorizedUserException
+     */
     public function loginUser($request): array{
         $identifier = filter_var(
             $request->input('email_or_username'),
@@ -72,11 +78,12 @@ class UserService
             ->where($identifier, $request->input('email_or_username'))
             ->first();
 
-        if(!is_null($user)){
+        if(is_null($user)){
+            throw new NotFoundUserException("User $identifier not found.");
+        }
+        else{
             if(!Auth::attempt($request->only($identifier, 'password'))){
-                $data = [];
-                $message = "User $identifier & password does not match with our record.";
-                $code = 401;
+                throw new UnauthorizedUserException("User $identifier & password does not match with our record.");
             }
             else{
                 $user = $this->appendRolesAndPermissions($user);
@@ -85,10 +92,6 @@ class UserService
                 $message = 'User Login Successfully!';
                 $code = 200;
             }
-        }else{
-            $data = [];
-            $message = "User $identifier not found.";
-            $code = 404;
         }
         return [
             'data' => $data,

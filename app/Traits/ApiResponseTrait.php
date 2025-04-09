@@ -26,7 +26,7 @@ trait ApiResponseTrait
     public function sendValidationError($message, $code = 422): JsonResponse
     {
         return response()->json([
-            'success' => 'error',
+            'status' => 'validation error',
             'data' => [],
             'message' => $message,
         ], $code);
