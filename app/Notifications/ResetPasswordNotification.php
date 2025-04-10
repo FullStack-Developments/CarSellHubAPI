@@ -7,17 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EmailVerificationNotification extends Notification
+class ResetPasswordNotification extends Notification
 {
     use Queueable;
-    private string $otp;
+
+    protected string $token;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($otp)
+    public function __construct($token)
     {
-        $this->otp = $otp;
+        $this->token = $token;
     }
 
     /**
@@ -36,10 +37,11 @@ class EmailVerificationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Email Verification')
-            ->markdown('mails.verification', [
-                'otp' => $this->otp,
-                'username' => $notifiable->username,
+            ->subject('Reset Password')
+            ->markdown('mails.reset-password', [
+                'token' => $this->token,
+                'firstname' => $notifiable->first_name,
+                'lastname' => $notifiable->last_name,
             ]);
     }
 

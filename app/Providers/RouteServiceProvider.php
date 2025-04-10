@@ -30,8 +30,8 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        RateLimiter::for('resend-code', function (Request $request) {
-            return Limit::perMinutes(5, 2)
+        RateLimiter::for('tenMinutes', function (Request $request) {
+            return Limit::perMinutes(10, 3)
                 ->by($request->user()?->id ?: $request->ip())
                 ->response(function () {
                     throw new TooManyRequestsHttpException();

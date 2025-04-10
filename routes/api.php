@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -9,18 +10,20 @@ Route::group(['prefix' => 'auth'], function () {
         ->group(function () {
             Route::post('register', 'register');
             Route::post('login', 'login');
-            Route::middleware('auth:sanctum')
-                ->group(function () {
-                    Route::post('logout', 'logout');
-                });
+            Route::post('logout', 'logout')
+                ->middleware('auth:sanctum');
         });
 
     Route::controller(EmailVerificationController::class)
         ->group(function (){
             Route::post('verify-email', 'verifyEmail');
-            Route::middleware(['auth:sanctum', 'throttle:resend-code'])
-                ->group(function () {
-                    Route::post('resend-code', 'resendVerificationEmail');
-                });
+            Route::post('resend-code', 'resendVerificationEmail')
+                ->middleware(['auth:sanctum', 'throttle:tenMinutes']);
+        });
+
+    Route::controller(ResetPasswordController::class)
+        ->group(function (){
+            Route::post('forget-password', 'forgetPassword')
+                ->middleware('throttle:tenMinutes');
         });
 });
