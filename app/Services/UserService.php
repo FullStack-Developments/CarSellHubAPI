@@ -8,6 +8,7 @@ use App\Traits\ManageFilesTrait;
 use App\Traits\OtpTokenTrait;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\UnauthorizedException;
 use Spatie\Permission\Models\Role;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -36,7 +37,7 @@ class UserService
             'last_name' => $request['last_name'],
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
-            'password' => bcrypt($request['password']),
+            'password' => Hash::make($request['password']),
             'picture_profile' => $photo ?? $request['picture_profile'],
             'address' => $request['address'],
         ]);

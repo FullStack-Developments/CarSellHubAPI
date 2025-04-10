@@ -91,6 +91,11 @@ class Handler extends ExceptionHandler
                 $status_code = Response::HTTP_TOO_MANY_REQUESTS;
                 return $this->sendError('Too many requests, please try later', $status_code);
             }
+
+            if($e instanceof  SameOldPasswordException){
+                $status_code = Response::HTTP_FORBIDDEN;
+                return $this->sendError('Same old password!, please change it.', $status_code);
+            }
         }
 
         return parent::render($request, $e);

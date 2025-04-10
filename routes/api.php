@@ -25,5 +25,6 @@ Route::group(['prefix' => 'auth'], function () {
         ->group(function (){
             Route::post('forget-password', 'forgetPassword')
                 ->middleware('throttle:tenMinutes');
+            Route::post('reset-password', 'resetPassword');
         });
 });

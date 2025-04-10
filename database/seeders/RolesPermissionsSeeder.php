@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use JetBrains\PhpStorm\NoReturn;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -33,7 +34,7 @@ class RolesPermissionsSeeder extends Seeder
                 'username' => 'admin',
                 'email' => 'admin@admin.com',
                 'phone_number' => '123456789',
-                'password' => bcrypt('rootadmin')
+                'password' => Hash::make('rootadmin')
             ]);
 
         $adminUser->assignRole('admin');
