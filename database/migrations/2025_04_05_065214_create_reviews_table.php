@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('car_id')
                 ->nullable()
-                ->constrained('cars');
+                ->constrained('cars')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('username');
             $table->string('phone_number');
             $table->boolean('is_public')->default(false);

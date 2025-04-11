@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\SameOldPasswordException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Services\ResetPasswordService;
@@ -14,7 +15,6 @@ class ResetPasswordController extends Controller
 {
     use ResponseTrait;
     public function __construct(private readonly ResetPasswordService $passwordService) {}
-
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
     {
         $this->passwordService->forgetPassword($request);

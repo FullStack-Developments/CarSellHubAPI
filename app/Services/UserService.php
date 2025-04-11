@@ -24,8 +24,8 @@ class UserService
     public function createUser($request): array
     {
         if($request->hasFile('picture_profile')){
-            $photo = $this->uploadFile(
-                $request->file('picture_profile'),
+            $photo = $this->uploadImage(
+                [$request->file('picture_profile')],
                 'picture_profile'
             );
         }
@@ -38,7 +38,7 @@ class UserService
             'email' => $request['email'],
             'phone_number' => $request['phone_number'],
             'password' => Hash::make($request['password']),
-            'picture_profile' => $photo ?? $request['picture_profile'],
+            'picture_profile' => $photo[0] ?? $request['picture_profile'],
             'address' => $request['address'],
         ]);
 

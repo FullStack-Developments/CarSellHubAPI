@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\AuthenticatedController;
-use App\Http\Controllers\EmailVerificationController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\Auth\AuthenticatedController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Features\CarController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -26,5 +27,17 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('forget-password', 'forgetPassword')
                 ->middleware('throttle:tenMinutes');
             Route::post('reset-password', 'resetPassword');
+        });
+});
+
+Route::group(['prefix' => 'home'], function (){
+    Route::controller(CarController::class)
+        ->prefix('car')
+        ->group(function () {
+            Route::middleware('auth:sanctum')->group(function () {
+                Route::post('store', 'store');
+
+            });
+
         });
 });

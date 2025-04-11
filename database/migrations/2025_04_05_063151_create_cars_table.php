@@ -18,12 +18,14 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('brand');
             $table->string('model');
-            $table->string('year');
+            $table->year('manufacture_year');
             $table->string('color');
-            $table->decimal('price', 6);
-            $table->string('location');
+            $table->decimal('price', 10, 2);
+            $table->string('country');
+            $table->string('city');
+            $table->boolean('is_new')->default(true);
             $table->boolean('is_sold')->default(false);
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

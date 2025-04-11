@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('first_image');
             $table->string('second_image');
             $table->string('third_image');
-
             $table->timestamps();
         });
     }

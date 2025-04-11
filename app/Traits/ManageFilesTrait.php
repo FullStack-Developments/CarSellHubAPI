@@ -8,11 +8,14 @@ use Illuminate\Support\Str;
 
 trait ManageFilesTrait
 {
-    public function uploadFile($file, $path = 'public'): string
+    public function uploadImage(array $files, $path = 'public'): array
     {
-        // $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $fileName = Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $filePath = Storage::disk('public')->putFileAs($path, $file, $fileName);
-        return URL::to('/') . '/storage/' . $filePath;
+        $uploadURLs = [];
+        foreach ($files as $file) {
+            $fileName = Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $filePath = Storage::disk('public')->putFileAs($path, $file, $fileName);
+            $uploadURLs[]= URL::to('/') . '/storage/' . $filePath;
+        }
+        return $uploadURLs;
     }
 }

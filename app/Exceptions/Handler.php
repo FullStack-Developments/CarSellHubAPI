@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -56,6 +59,15 @@ class Handler extends ExceptionHandler
             return $this->sendError($e->getMessage());
         }
 
+        if ($e instanceof NotFoundHttpException) {
+            $status_code = HttpFoundationResponse::HTTP_NOT_FOUND;
+            return $this->sendError($e->getMessage(), $status_code);
+        }
+
+        if($e instanceof AuthorizationException) {
+            return $this->sendError($e->getMessage());
+        }
+
         if($request->expectsJson()){
             if($e instanceof QueryException){
                 $status_code =  Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -96,6 +108,11 @@ class Handler extends ExceptionHandler
                 $status_code = Response::HTTP_FORBIDDEN;
                 return $this->sendError('Same old password!, please change it.', $status_code);
             }
+            if($e instanceof AccessDeniedException) {
+                $status_code = Response::HTTP_FORBIDDEN;
+                return $this->sendError('You do not have permission to access this page.', $status_code);
+            }
+
         }
 
         return parent::render($request, $e);
