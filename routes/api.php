@@ -34,9 +34,9 @@ Route::group(['prefix' => 'home'], function (){
     Route::controller(CarController::class)
         ->prefix('car')
         ->group(function () {
+            Route::get('/', 'index');
             Route::middleware('auth:sanctum')->group(function () {
-                Route::post('store', 'store');
-
+                Route::post('/', 'store');
             });
 
         });

@@ -14,6 +14,7 @@ class Car extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $hidden = ['id', 'user_id'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

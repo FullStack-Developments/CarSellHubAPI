@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Cars;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,10 +26,10 @@ class StoreCarRequest extends FormRequest
             'brand' => ['required', 'string'],
             'model' => ['required', 'string'],
             'color' => ['required', 'string'],
-            'manufacture_year' => ['required', 'numeric'],
+            'year' => ['required', 'integer', "between:1999, " . date('Y')],
             'price' => ['required', 'numeric'],
-            'country' => ['required', 'string'],
-            'city' => ['required', 'string'],
+            'country' => ['required', 'string', 'max:100'],
+            'city' => ['required', 'string', 'max:100'],
             'is_new' => ['boolean'],
             'is_sold' => ['boolean'],
             'description' => ['string'],

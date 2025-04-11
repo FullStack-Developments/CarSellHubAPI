@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\SameOldPasswordException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ForgetPasswordRequest;
-use App\Http\Requests\ResetPasswordRequest;
-use App\Services\ResetPasswordService;
+use App\Http\Requests\Auth\ForgetPasswordRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Services\Auth\ResetPasswordService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\ResponseTrait;
 use Psr\SimpleCache\InvalidArgumentException;

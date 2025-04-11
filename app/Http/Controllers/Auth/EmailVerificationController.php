@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EmailVerificationRequest;
-use App\Http\Requests\ResendEmailRequest;
-use App\Services\EmailVerificationService;
+use App\Http\Requests\Auth\EmailVerificationRequest;
+use App\Http\Requests\Auth\ResendEmailRequest;
+use App\Services\Auth\EmailVerificationService;
 use Illuminate\Http\JsonResponse;
 use Psr\SimpleCache\InvalidArgumentException;
 

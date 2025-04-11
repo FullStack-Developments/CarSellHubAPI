@@ -4,11 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Car;
 use App\Models\CarImage;
-use App\Traits\ManageFilesTrait;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class CarSeeder extends Seeder
