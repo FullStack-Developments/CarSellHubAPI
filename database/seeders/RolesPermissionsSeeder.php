@@ -31,35 +31,17 @@ class RolesPermissionsSeeder extends Seeder
         $clientRole->givePermissionTo(['index-cars']);
 
         $adminUser = User::factory()->create([
-                'username' => 'admin',
-                'email' => 'admin@admin.com',
-                'phone_number' => '123456789',
-                'password' => Hash::make('rootadmin')
-            ]);
+            'username' => 'admin',
+            'email' => 'admin@admin.com',
+            'phone_number' => '123456789',
+            'password' => Hash::make('adminadmin'),
+            'email_verified_at' => now(),
+        ]);
 
         $adminUser->assignRole('admin');
 
         $adminPermission = $adminRole->permissions()->pluck('name')->toArray();
         $adminUser->givePermissionTo($adminPermission);
 
-        //==========================================================================
-        //        $sellerUser = User::factory()->create([
-        //            'name' => 'Seller User',
-        //            'email' => 'seller@seller.com',
-        //            'password' => bcrypt('12345')
-        //        ]);
-        //        $sellerUser->assignRole($sellerRole);
-        //        $sellerPermission = $sellerRole->permissions()->pluck('name')->toArray();
-        //        $sellerUser->givePermissionTo($sellerPermission);
-
-        //==========================================================================
-        //        $clientUser = User::factory()->create([
-        //            'name' => 'Client User',
-        //            'email' => 'client@client.com',
-        //            'password' => bcrypt('12345')
-        //        ]);
-        //        $clientUser->assignRole($clientRole);
-        //        $clientPermission = $clientRole->permissions()->pluck('name')->toArray();
-        //        $clientUser->givePermissionTo($clientPermission);
     }
 }

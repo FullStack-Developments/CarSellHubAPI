@@ -26,7 +26,7 @@ class RegisterUserRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:45', 'min:3'],
             'last_name' => ['required', 'string', 'max:45', 'min:3'],
             'email' => ['required', 'string', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone_number' => ['required', 'digits:10', 'regex:/^([0-9\s\-\+\(\)]*)$/'],
             'picture_profile' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'address' => ['string', 'max:255'],
