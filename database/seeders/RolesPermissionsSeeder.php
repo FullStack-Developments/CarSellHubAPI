@@ -31,9 +31,7 @@ class RolesPermissionsSeeder extends Seeder
         $clientRole->givePermissionTo(['index-cars']);
 
         $adminUser = User::factory()->create([
-            'username' => 'admin',
             'email' => 'admin@admin.com',
-            'phone_number' => '123456789',
             'password' => Hash::make('adminadmin'),
             'email_verified_at' => now(),
         ]);
@@ -42,6 +40,14 @@ class RolesPermissionsSeeder extends Seeder
 
         $adminPermission = $adminRole->permissions()->pluck('name')->toArray();
         $adminUser->givePermissionTo($adminPermission);
+
+        $sellerUser = User::factory()->create([
+            'email' => 'john.doe@example.com',
+            'password' => Hash::make('12345678'),
+        ]);
+        $sellerUser->assignRole($sellerRole);
+        $sellerPermission = $sellerRole->permissions()->pluck('name')->toArray();
+        $sellerUser->givePermissionTo($sellerPermission);
 
     }
 }
