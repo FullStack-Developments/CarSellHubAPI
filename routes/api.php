@@ -34,6 +34,7 @@ Route::group(['prefix' => 'home'], function (){
     Route::controller(CarController::class)
         ->group(function () {
             Route::get('brands/cars','getBrands');
+            Route::get('car/seller/{sellerName}','getCarsBySellerName');
             Route::group(['prefix' => 'car'],function(){
                 Route::get('/', 'index')
                     ->name('car.index');

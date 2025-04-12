@@ -117,7 +117,7 @@ class CarServices implements CarServicesInterface
             throw new NotFoundHttpException('Car not found.');
         }
     }
-    public function getAllCarBrands(): array
+    public function getCarBrands(): array
     {
         $car_brands = $this->modelQuery()
             ->distinct()
@@ -130,6 +130,18 @@ class CarServices implements CarServicesInterface
         else{
             throw new NotFoundHttpException('There is no car brands available at the moment.');
         }
+    }
+    public function getCarsBySellerName(string $sellerName): array{
+        $cars = $this->modelQuery()
+            ->bySellerName($sellerName)
+            ->paginate(10);
+        if($cars->isNotEmpty()){
+            $message = 'Cars indexed by seller name successfully.';
+            return ['cars' => $cars, 'message' => $message];
+        }else{
+            throw new NotFoundHttpException('There is no cars for seller name at the moment.');
+        }
+
     }
     private function createCar($request) : Car {
         return Car::create([

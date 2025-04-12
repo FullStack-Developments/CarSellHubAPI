@@ -10,6 +10,7 @@ use App\Models\Car;
 use App\Services\Features\CarServices;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
@@ -47,7 +48,11 @@ class CarController extends Controller
         return $this->sendSuccess([], 'Car deleted successfully');
     }
     public function getBrands() : JsonResponse{
-        $response = $this->carServices->getAllCarBrands();
+        $response = $this->carServices->getCarBrands();
         return $this->sendSuccess($response['car_brands'], $response['message']);
+    }
+    public function getCarsBySellerName($sellerName) : JsonResponse{
+        $response = $this->carServices->getCarsBySellerName($sellerName);
+        return $this->sendSuccess($response['cars'], $response['message']);
     }
 }

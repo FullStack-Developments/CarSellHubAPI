@@ -12,6 +12,7 @@ interface CarServicesInterface
     public function updateCarAndImages($request, $id): array ;
     public function deleteCarAndImages($id): void ;
     public function getCarById(int $id): array ;
-    public function getAllCarBrands(): array ;
+    public function getCarBrands(): array ;
+    public function getCarsBySellerName(string $sellerName): array;
 }
 
