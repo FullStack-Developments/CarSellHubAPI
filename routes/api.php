@@ -32,24 +32,25 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['prefix' => 'home'], function (){
     Route::controller(CarController::class)
-        ->prefix('car')
         ->group(function () {
-            Route::get('/', 'index')
-                ->name('car.index');
-            Route::get('/{id}', 'show')
-                ->name('car.show');
-
-            Route::middleware('auth:sanctum')->group(function () {
-                Route::post('/', 'store')
-                    ->name('car.store')
-                    ->middleware('can:car.store');
-                Route::post('/{id}', 'update')
-                    ->name('car.update')
-                    ->middleware('can:car.update');
-                Route::delete('/{id}', 'destroy')
-                    ->name('car.destroy')
-                    ->middleware('can:car.destroy');
+            Route::get('brands/cars','getBrands');
+            Route::group(['prefix' => 'car'],function(){
+                Route::get('/', 'index')
+                    ->name('car.index');
+                Route::get('/{id}', 'show')
+                    ->name('car.show');
+                Route::middleware('auth:sanctum')
+                    ->group(function () {
+                        Route::post('/', 'store')
+                            ->name('car.store')
+                            ->middleware('can:car.store');
+                        Route::post('/{id}', 'update')
+                            ->name('car.update')
+                            ->middleware('can:car.update');
+                        Route::delete('/{id}', 'destroy')
+                            ->name('car.destroy')
+                            ->middleware('can:car.destroy');
+                    });
             });
-
         });
 });

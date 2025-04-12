@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Cars\FilterCarsRequest;
 use App\Http\Requests\Cars\StoreCarRequest;
 use App\Http\Requests\Cars\UpdateCarRequest;
+use App\Models\Car;
 use App\Services\Features\CarServices;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -23,8 +24,7 @@ class CarController extends Controller
         $response = $this->carServices->storeCar($request);
         return $this->sendSuccess($response['car'], $response['message']);
     }
-
-    public function show($id): JsonResponse{
+    public function show(int $id): JsonResponse{
         $response = $this->carServices->getCarById($id);
         return $this->sendSuccess($response['car'], $response['message']);
     }
@@ -45,5 +45,9 @@ class CarController extends Controller
     {
         $this->carServices->deleteCarAndImages($id);
         return $this->sendSuccess([], 'Car deleted successfully');
+    }
+    public function getBrands() : JsonResponse{
+        $response = $this->carServices->getAllCarBrands();
+        return $this->sendSuccess($response['car_brands'], $response['message']);
     }
 }

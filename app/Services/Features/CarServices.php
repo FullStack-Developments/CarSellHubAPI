@@ -9,6 +9,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function PHPUnit\Framework\isEmpty;
 
 class CarServices implements CarServicesInterface
 {
@@ -53,7 +54,6 @@ class CarServices implements CarServicesInterface
 
         return ['car' => $car, 'message' => 'Car uploaded successfully.'];
     }
-
     /**
      * @throws AuthorizationException
      */
@@ -82,7 +82,6 @@ class CarServices implements CarServicesInterface
             throw new NotFoundHttpException('Car not found.');
         }
     }
-
     /**
      * @throws AuthorizationException
      */
@@ -111,7 +110,6 @@ class CarServices implements CarServicesInterface
         $car = $this->modelQuery()->where('id', $id)->first();
         if(!is_null($car)){
             $car = $this->modelQuery()->withUsersAndImages()->where('id', $id)->first();
-
              $message = 'Car for id (' . $id .') indexed successfully.';
              return ['car' => $car, 'message' => $message];
         }
@@ -121,7 +119,18 @@ class CarServices implements CarServicesInterface
     }
     public function getAllCarBrands(): array
     {
-        return [];
+        $car_brands = $this->modelQuery()
+            ->select('brand')
+            ->distinct()
+            ->pluck('brand')
+            ->toArray();
+        if($car_brands){
+            $message = 'Car brands indexed successfully.';
+            return ['car_brands' => $car_brands, 'message' => $message];
+        }
+        else{
+            throw new NotFoundHttpException('There is no car brands available at the moment.');
+        }
     }
     private function createCar($request) : Car {
         return Car::create([
