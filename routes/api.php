@@ -53,4 +53,6 @@ Route::group(['prefix' => 'home'], function (){
                     });
             });
         });
+
+
 });

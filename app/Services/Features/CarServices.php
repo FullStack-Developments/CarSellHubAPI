@@ -120,11 +120,10 @@ class CarServices implements CarServicesInterface
     public function getAllCarBrands(): array
     {
         $car_brands = $this->modelQuery()
-            ->select('brand')
             ->distinct()
-            ->pluck('brand')
-            ->toArray();
-        if($car_brands){
+            ->select('brand')
+            ->pluck('brand');
+        if($car_brands->isNotEmpty()){
             $message = 'Car brands indexed successfully.';
             return ['car_brands' => $car_brands, 'message' => $message];
         }
