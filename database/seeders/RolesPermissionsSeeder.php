@@ -15,10 +15,9 @@ class RolesPermissionsSeeder extends Seeder
     {
         $adminRole = Role::create(['name' => 'admin']);
         $sellerRole = Role::create(['name' => 'seller']);
-        $clientRole = Role::create(['name' => 'client']);
 
         $permissions = [
-            'add-cars', 'index-cars', 'update-cars', 'delete-cars'
+            'car.index', 'car.store', 'car.update', 'car.delete'
         ];
 
         foreach ($permissions as $permission) {
@@ -27,8 +26,7 @@ class RolesPermissionsSeeder extends Seeder
 
         $adminRole->syncPermissions($permissions);
 
-        $sellerRole->givePermissionTo(['add-cars', 'update-cars', 'index-cars']);
-        $clientRole->givePermissionTo(['index-cars']);
+        $sellerRole->givePermissionTo(['car.index', 'car.store', 'car.update']);
 
         $adminUser = User::factory()->create([
             'email' => 'admin@admin.com',
@@ -37,12 +35,19 @@ class RolesPermissionsSeeder extends Seeder
         ]);
 
         $adminUser->assignRole('admin');
-
         $adminPermission = $adminRole->permissions()->pluck('name')->toArray();
         $adminUser->givePermissionTo($adminPermission);
 
         $sellerUser = User::factory()->create([
-            'email' => 'john.doe@example.com',
+            'email' => "john.doe@example.com",
+            'password' => Hash::make('12345678'),
+        ]);
+        $sellerUser->assignRole($sellerRole);
+        $sellerPermission = $sellerRole->permissions()->pluck('name')->toArray();
+        $sellerUser->givePermissionTo($sellerPermission);
+
+        $sellerUser = User::factory()->create([
+            'email' => "john.doe2@example.com",
             'password' => Hash::make('12345678'),
         ]);
         $sellerUser->assignRole($sellerRole);

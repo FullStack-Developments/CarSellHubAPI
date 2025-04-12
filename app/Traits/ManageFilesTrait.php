@@ -18,4 +18,10 @@ trait ManageFilesTrait
         }
         return $uploadURLs;
     }
+
+    public function deleteImage($filePath) : void {
+        $path = parse_url($filePath, PHP_URL_PATH);
+        $storagePath = ltrim($path, '/storage');
+        Storage::disk('public')->delete($storagePath);
+    }
 }

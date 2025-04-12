@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -58,8 +59,7 @@ class Handler extends ExceptionHandler
         if($e instanceof MethodNotAllowedHttpException) {
             return $this->sendError($e->getMessage());
         }
-
-        if ($e instanceof NotFoundHttpException) {
+        if($e instanceof RouteNotFoundException){
             $status_code = HttpFoundationResponse::HTTP_NOT_FOUND;
             return $this->sendError($e->getMessage(), $status_code);
         }

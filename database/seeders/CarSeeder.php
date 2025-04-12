@@ -33,7 +33,7 @@ class CarSeeder extends Seeder
                 "description" => "A reliable sedan with excellent fuel efficiency and a comfortable ride.",
             ],
             [
-                'user_id' => 2,
+                'user_id' => 3,
                 'brand' => 'Honda',
                 'model' => 'Civic',
                 'color' => 'Red',
@@ -61,7 +61,7 @@ class CarSeeder extends Seeder
                 "description" => "An iconic American muscle car that offers thrilling performance and modern technology."
             ],
             [
-                'user_id' => 2,
+                'user_id' => 3,
                 'brand' => 'BMW',
                 'model' => '3 Series',
                 'color' => 'White',
