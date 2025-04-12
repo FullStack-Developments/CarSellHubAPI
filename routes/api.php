@@ -36,6 +36,9 @@ Route::group(['prefix' => 'home'], function (){
         ->group(function () {
             Route::get('/', 'index')
                 ->name('car.index');
+            Route::get('/{id}', 'show')
+                ->name('car.show');
+
             Route::middleware('auth:sanctum')->group(function () {
                 Route::post('/', 'store')
                     ->name('car.store')
@@ -43,6 +46,9 @@ Route::group(['prefix' => 'home'], function (){
                 Route::post('/{id}', 'update')
                     ->name('car.update')
                     ->middleware('can:car.update');
+                Route::delete('/{id}', 'destroy')
+                    ->name('car.destroy')
+                    ->middleware('can:car.destroy');
             });
 
         });

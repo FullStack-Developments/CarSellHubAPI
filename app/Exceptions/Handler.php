@@ -63,9 +63,9 @@ class Handler extends ExceptionHandler
             $status_code = HttpFoundationResponse::HTTP_NOT_FOUND;
             return $this->sendError($e->getMessage(), $status_code);
         }
-
         if($e instanceof AuthorizationException) {
-            return $this->sendError($e->getMessage());
+            $status_code = Response::HTTP_UNAUTHORIZED;
+            return $this->sendError("You are not authorized to perform this action.",$status_code);
         }
 
         if($request->expectsJson()){

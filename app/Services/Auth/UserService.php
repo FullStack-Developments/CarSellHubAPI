@@ -24,7 +24,7 @@ class UserService
     public function createUser($request): array
     {
         if($request->hasFile('picture_profile')){
-            $photo = $this->uploadImage(
+            $photo = $this->uploadImageToStorage(
                 [$request->file('picture_profile')],
                 'picture_profile'
             );

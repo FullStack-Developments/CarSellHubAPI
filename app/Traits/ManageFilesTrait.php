@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 trait ManageFilesTrait
 {
-    public function uploadImage(array $files, $path = 'public'): array
+    public function uploadImageToStorage(array $files, $path = 'public'): array
     {
         $uploadURLs = [];
         foreach ($files as $file) {
@@ -19,9 +19,11 @@ trait ManageFilesTrait
         return $uploadURLs;
     }
 
-    public function deleteImage($filePath) : void {
-        $path = parse_url($filePath, PHP_URL_PATH);
-        $storagePath = ltrim($path, '/storage');
-        Storage::disk('public')->delete($storagePath);
+    public function deleteImageFromStorage(array $files) : void {
+        foreach ($files as $file) {
+            $path = parse_url($file, PHP_URL_PATH);
+            $storagePath = ltrim($path, '/storage');
+            Storage::disk('public')->delete($storagePath);
+        }
     }
 }

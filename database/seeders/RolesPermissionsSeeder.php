@@ -17,7 +17,7 @@ class RolesPermissionsSeeder extends Seeder
         $sellerRole = Role::create(['name' => 'seller']);
 
         $permissions = [
-            'car.index', 'car.store', 'car.update', 'car.delete'
+            'car.index', 'car.store', 'car.update', 'car.destroy'
         ];
 
         foreach ($permissions as $permission) {
