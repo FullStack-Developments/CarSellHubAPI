@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Features;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Ads\FilterAdsRequest;
 use App\Http\Requests\Ads\StoreAdRequest;
 use App\Services\Features\AdService;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +12,11 @@ class AdsController extends Controller
 {
     public function __construct(private readonly AdService $adService){}
 
-    public function index():void{}
+    public function index(FilterAdsRequest $request):JsonResponse
+    {
+        $response = $this->adService->filterAds($request);
+        return $this->sendSuccess($response['ads'], $response['message']);
+    }
 
     public function store(StoreAdRequest $request):JsonResponse{
         $response = $this->adService->createAd($request->validated());

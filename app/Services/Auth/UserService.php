@@ -86,6 +86,7 @@ class UserService
         $user = User::query()
             ->where($identifier, $request['email_or_username'])
             ->first();
+
         if(is_null($user)){
             throw new NotFoundHttpException("User $identifier not found.");
         }

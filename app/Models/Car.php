@@ -44,8 +44,9 @@ class Car extends Model
     public function scopeWithImages($query): void{
         $query->with([
             'images' => function ($query){
-            $query->select('car_id','first_image','second_image','third_image');
-        }]);
+                $query->select('car_id','first_image','second_image','third_image');
+            }
+        ]);
     }
     public function scopeFilter($query, $request): void{
         $query->when(

@@ -7,8 +7,6 @@ use App\Interfaces\AdsServicesInterface;
 use App\Models\Ad;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AdService implements AdsServicesInterface
 {
@@ -19,14 +17,23 @@ class AdService implements AdsServicesInterface
         return Ad::query();
     }
 
-    public function getAds(): array
+    public function filterAds($request): array
     {
-        // TODO: Implement getAds() method.
-    }
+        $adBuilder = $this->modelQuery()->filter($request)->withCreator();
+
+        $adBuilder->latest()->get();
+
+        if($adBuilder->count() == 0) {
+            $message = 'There is no Ads found.';
+            $adBuilder = [];
+        }else{
+            $message = 'Ads indexed successfully.';
+            $adBuilder = $adBuilder->paginate(10);
+        }
+        return ['ads' => $adBuilder, 'message' => $message];    }
 
     public function createAd($request): array
     {
-
         $ads_image_path = "ads";
         $image = $this->uploadImageToStorage([$request['image']], $ads_image_path);
 

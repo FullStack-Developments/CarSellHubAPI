@@ -30,11 +30,11 @@ class FilterCarsRequest extends FormRequest
             'color' => ['nullable', 'string'],
             'year' => ['nullable', 'integer', "between : 1999, ". date('Y')],
             'min_price' => ['nullable', 'numeric', 'min:0'],
-            'max_price' => ['nullable', 'numeric', 'min:0', 'max:gte:price_min'],
-            'country' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'is_new' => 'nullable|boolean',
-            'is_sold' => 'nullable|boolean',
+            'max_price' => ['nullable', 'numeric', 'min:0'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'is_new' => ['nullable', 'boolean'],
+            'is_sold' => ['nullable', 'boolean'],
         ];
     }
 }
