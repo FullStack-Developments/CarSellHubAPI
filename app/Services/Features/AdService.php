@@ -7,6 +7,7 @@ use App\Interfaces\AdsServicesInterface;
 use App\Models\Ad;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdService implements AdsServicesInterface
 {
@@ -24,10 +25,10 @@ class AdService implements AdsServicesInterface
         $adBuilder->latest()->get();
 
         if($adBuilder->count() == 0) {
-            $message = 'There is no Ads found.';
+            $message = 'There is no Advertisements found.';
             $adBuilder = [];
         }else{
-            $message = 'Ads indexed successfully.';
+            $message = 'Advertisements indexed successfully.';
             $adBuilder = $adBuilder->paginate(10);
         }
         return ['ads' => $adBuilder, 'message' => $message];    }
@@ -49,12 +50,21 @@ class AdService implements AdsServicesInterface
             ]);
        $advertisement = $advertisement->refresh();
        $resource = new AdsResource($advertisement);
-       return ['advertisement' => $resource, 'message' => 'Ad created successfully'];
+       return ['advertisement' => $resource, 'message' => 'Advertisement created successfully'];
     }
 
-    public function showAd($id): array
+    public function getAdsById($id): array
     {
-        // TODO: Implement showAd() method.
+        $ad = $this->modelQuery()
+            ->withCreator()
+            ->where('id', $id)
+            ->first();
+        if($ad){
+            return ['advertisement' => $ad, 'message' => 'Advertisement indexes successfully'];
+        }
+        else{
+            throw new NotFoundHttpException("Advertisement for id (${id}) not found.");
+        }
     }
 
     public function updateAd($request, $id): array

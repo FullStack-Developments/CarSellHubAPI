@@ -23,7 +23,10 @@ class AdsController extends Controller
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
 
-    public function showAd($id):void{}
+    public function show($id):JsonResponse{
+        $response = $this->adService->getAdsById($id);
+        return $this->sendSuccess($response['advertisement'], $response['message']);
+    }
 
     // only admin can update ads to accept ad or reject
     public function update($request, $id):void{}

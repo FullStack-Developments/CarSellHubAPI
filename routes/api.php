@@ -62,7 +62,8 @@ Route::group(['prefix' => 'home'], function (){
         ->group(function () {
             Route::get('/', 'index')
                 ->name('advertisement.index');
-
+            Route::get('/{id}', 'show')
+                ->name('advertisement.show');
             Route::middleware('auth:sanctum')
                 ->group(function () {
                     Route::post('/', 'store')
