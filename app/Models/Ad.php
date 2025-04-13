@@ -9,10 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Ad extends Model
 {
     use HasFactory;
-    protected  $fillable = [
-        'user_id', 'image', 'link',
-        'hit', 'views', 'start_date', 'end_date',
-    ];
+    protected $guarded = [];
 
     public function user() : BelongsTo
     {

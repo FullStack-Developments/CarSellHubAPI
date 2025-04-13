@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Features\AdsController;
 use App\Http\Controllers\Features\CarController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'home'], function (){
                     ->name('car.index');
                 Route::get('/{id}', 'show')
                     ->name('car.show');
+
                 Route::middleware('auth:sanctum')
                     ->group(function () {
                         Route::post('/', 'store')
@@ -55,5 +57,17 @@ Route::group(['prefix' => 'home'], function (){
             });
         });
 
+    Route::controller(AdsController::class)
+        ->prefix('advertisement')
+        ->group(function () {
+            Route::get('/', 'index')
+                ->name('advertisement.index');
 
+            Route::middleware('auth:sanctum')
+                ->group(function () {
+                    Route::post('/', 'store')
+                    ->name('advertisement.store')
+                    ->middleware('can:advertisement.store');
+                });
+        });
 });

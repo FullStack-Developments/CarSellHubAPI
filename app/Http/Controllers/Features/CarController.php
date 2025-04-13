@@ -7,14 +7,14 @@ use App\Http\Requests\Cars\FilterCarsRequest;
 use App\Http\Requests\Cars\StoreCarRequest;
 use App\Http\Requests\Cars\UpdateCarRequest;
 use App\Models\Car;
-use App\Services\Features\CarServices;
+use App\Services\Features\CarService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
-    public function __construct(private readonly CarServices $carServices){}
+    public function __construct(private readonly CarService $carServices){}
     public function index(FilterCarsRequest $request): JsonResponse
     {
         $response = $this->carServices->filterCars($request);

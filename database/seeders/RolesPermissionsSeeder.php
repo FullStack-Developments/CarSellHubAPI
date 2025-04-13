@@ -17,7 +17,8 @@ class RolesPermissionsSeeder extends Seeder
         $sellerRole = Role::create(['name' => 'seller']);
 
         $permissions = [
-            'car.index', 'car.store', 'car.update', 'car.destroy'
+            'car.index', 'car.store', 'car.update', 'car.destroy',
+            'advertisement.index', 'advertisement.store', 'advertisement.update', 'advertisement.destroy',
         ];
 
         foreach ($permissions as $permission) {
@@ -26,7 +27,10 @@ class RolesPermissionsSeeder extends Seeder
 
         $adminRole->syncPermissions($permissions);
 
-        $sellerRole->givePermissionTo(['car.index', 'car.store', 'car.update']);
+        $sellerRole->givePermissionTo([
+            'car.index', 'car.store', 'car.update',
+            'advertisement.index', 'advertisement.store'
+        ]);
 
         $adminUser = User::factory()->create([
             'email' => 'admin@admin.com',

@@ -17,7 +17,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('cars')
                 ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+                ->nullOnDelete();
             $table->string('username');
             $table->string('phone_number');
             $table->boolean('is_public')->default(false);

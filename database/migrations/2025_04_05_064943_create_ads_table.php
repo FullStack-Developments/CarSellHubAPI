@@ -14,16 +14,21 @@ return new class extends Migration
         Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
+                ->nullable()
                 ->constrained('users')
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table->string('full_name');
             $table->string('image');
             $table->string('link');
             $table->string('location');
-            $table->integer('hit')->default(0);
+            $table->integer('hits')->default(0);
             $table->integer('views')->default(0);
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->boolean('is_active')->default(true);
+            $table->enum('status', ['pending', 'approved', 'rejected'])
+                ->default('pending');
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Events\VerifiedEmailEvent;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use App\Traits\OtpTokenTrait;
@@ -97,7 +98,7 @@ class UserService
             }
             else{
                 $user = $this->appendRolesAndPermissions($user);
-                $data['user'] = $user;
+                $data['user'] = new UserResource($user);
                 $data['token'] = $user->createToken('token')->plainTextToken;
                 $message = 'User Logged In Successfully!';
                 $code = 200;
