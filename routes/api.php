@@ -31,47 +31,59 @@ Route::group(['prefix' => 'auth'], function () {
         });
 });
 
+//Routes for admin
+Route::prefix('admin')
+->middleware('auth:sanctum')
+->group(function (){
+    Route::controller(CarController::class)
+    ->prefix('cars')
+    ->group(function () {
+        Route::get('/', 'index')->name('admin.cars.index');
+        Route::get('brands/show','getBrands')->name('admin.cars.brands');
+        Route::get('car-by-seller-name/{sellerName}','getCarsBySellerName')->name('admin.cars.getCarsBySellerName');
+        Route::post('{id}', 'update')->name('admin.cars.update');
+        Route::delete('{id}', 'destroy')->name('admin.cars.destroy');
+    });
+
+    Route::controller(AdvertisementController::class)
+        ->prefix('advertisements')
+        ->group(function () {
+            Route::get('/', 'showAllAdsForAdmin')->name('admin.advertisement.showAllAds');
+            Route::get('/{id}', 'showAdById')->name('admin.advertisement.showAdById');
+            Route::post('/{id}', 'updateByAdmin')->name('admin.advertisement.updateByAdmin');
+            Route::delete('/{id}', 'destroy')->name('admin.advertisement.destroy');
+        });
+});
+
+// feature Routes for sellers and clients
 Route::group(['prefix' => 'home'], function (){
     Route::controller(CarController::class)->prefix('cars')->group(function () {
         Route::prefix('client')->group(function () {
-            Route::get('/', 'index')->name('cars.index');
-            Route::get('/brands','getBrands')->name('cars.brands');
-            Route::get('/car-by-id/{id}', 'showCarsById')->name('car.showCarsById');
-            Route::get('/car-by-seller-name/{sellerName}','getCarsBySellerName')->name('car.getCarsBySellerName');
+            Route::get('/', 'index')->name('client.cars.index');
+            Route::get('/brands','getBrands')->name('client.cars.brands');
+            Route::get('/car-by-id/{id}', 'showCarsById')->name('client.cars.showCarsById');
+            Route::get('/car-by-seller-name/{sellerName}','getCarsBySellerName')->name('client.cars.getCarsBySellerName');
         });
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::prefix('seller')->group(function () {
-                Route::get('/','showCarsForSeller')->name('cars.showCarsForSeller');
-                Route::post('/', 'store')->name('cars.store');
-                Route::post('/{id}', 'update')->name('cars.update');
-            });
-            Route::prefix('admin')->group(function () {
-                Route::get('/', 'index')->name('cars.admin.index');
-                Route::post('/{id}', 'update')->name('cars.update');
-                Route::delete('/{id}', 'destroy')->name('cars.destroy');
+                Route::get('/','showCarsForSeller')->name('seller.cars.showCarsForSeller');
+                Route::post('/', 'store')->name('seller.cars.store');
+                Route::post('/{id}', 'update')->name('seller.cars.update');
             });
         });
     });
 
     Route::controller(AdvertisementController::class)->prefix('advertisements')->group(function () {
         Route::prefix('client')->group(function () {
-            Route::get('/', 'index')
-                ->name('advertisement.index');
-            Route::get('/{id}', 'showAdsById')
-                ->name('advertisement.showAdsById');
+            Route::get('/', 'showAllAdsForClients')->name('client.advertisement.index');
+            Route::get('/{id}', 'showAdById')->name('client.advertisement.showAdById');
         });
-        Route::middleware('auth:sanctum')->group(function () {
-            Route::prefix('seller')->group(function () {
-                Route::get('/', 'showAdsForSeller')->name('advertisement.showAdsForSeller'); //show ads for auth seller
-                Route::post('/', 'store')->name('advertisement.store');
-                Route::post('/{id}', 'updateBySeller')->name('advertisement.updateBySeller');
-            });
 
-            Route::prefix('admin')->group(function () {
-                Route::post('/{id}', 'updateByAdmin')->name('advertisement.updateByAdmin');
-                Route::delete('/{id}', 'destroy')->name('advertisement.destroy');
-            });
+        Route::prefix('seller')->middleware('auth:sanctum')->group(function () {
+            Route::get('/', 'showAdsForSeller')->name('seller.advertisement.showAdsForSeller'); //show ads for auth seller
+            Route::post('/', 'store')->name('seller.advertisement.store');
+            Route::post('/{id}', 'updateBySeller')->name('seller.advertisement.updateBySeller');
         });
     });
 });

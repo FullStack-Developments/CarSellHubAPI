@@ -54,6 +54,7 @@ class CarService implements CarServicesInterface
 
         return ['car' => $car, 'message' => 'Car uploaded successfully.'];
     }
+
     /**
      * @throws AuthorizationException
      */
@@ -82,6 +83,7 @@ class CarService implements CarServicesInterface
             throw new NotFoundHttpException('Car not found.');
         }
     }
+
     /**
      * @throws AuthorizationException
      */
@@ -131,10 +133,11 @@ class CarService implements CarServicesInterface
             throw new NotFoundHttpException('There is no car brands available at the moment.');
         }
     }
-    public function getCarsBySellerName(string $sellerName): array{
-
+    public function getCarsBySellerName(string $sellerName): array
+    {
         $cars = $this->modelQuery()
             ->bySellerName($sellerName)
+            ->withUsersAndImages()
             ->paginate(10);
         if($cars->isNotEmpty()){
             $message = 'Cars indexed by seller name successfully.';

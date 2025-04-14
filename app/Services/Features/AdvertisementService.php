@@ -5,7 +5,6 @@ namespace App\Services\Features;
 use App\Http\Resources\AdvertisementsResource;
 use App\Interfaces\AdvertisementServicesInterface;
 use App\Models\Advertisement;
-use App\Models\CarImage;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,14 +23,13 @@ class AdvertisementService implements AdvertisementServicesInterface
     {
         $adBuilder = $this->modelQuery()
             ->withFilter($request)
-            ->withCreator()
             ->isActive()
-            ->isApproved();
+            ->isApproved()
+            ->withCreator();
 
-        $adBuilder
-            ->selectedColumn()
-            ->orderBy('views', 'desc')
-            ->get();
+        $adBuilder->selectedColumn()
+        ->orderBy('views', 'desc')
+        ->get();
 
         if($adBuilder->count() == 0) {
             $message = 'There is no Advertisements found.';
@@ -40,7 +38,38 @@ class AdvertisementService implements AdvertisementServicesInterface
             $message = 'Advertisements indexed successfully.';
             $adBuilder = $adBuilder->paginate(10);
         }
-        return ['ads' => $adBuilder, 'message' => $message];    }
+        return ['ads' => $adBuilder, 'message' => $message];
+    }
+
+    public function filterAllAdsForAdmin($request):array{
+        $adBuilder = $this->modelQuery()
+            ->withFilter($request)
+            ->withCreator();
+
+        if($adBuilder->count() == 0) {
+            $message = 'There is no Advertisements found.';
+            $adBuilder = [];
+        }else{
+            $message = 'Advertisements indexed successfully.';
+            $adBuilder = $adBuilder->paginate(10);
+        }
+        return ['ads' => $adBuilder, 'message' => $message];
+    }
+    public function getAdsForSeller():array
+    {
+        $advertisements = $this->modelQuery()
+            ->where('user_id', auth()->id());
+        $advertisements->orderBy('views', 'desc')->get();
+
+        if($advertisements->count() == 0) {
+            $message = 'There is no Advertisements found for you yet.';
+            $advertisements = [];
+        }else{
+            $message = 'Advertisements indexed successfully.';
+            $advertisements = $advertisements->paginate(10);
+        }
+        return ['advertisement' => $advertisements, 'message' => $message];
+    }
 
     public function createAd($request): array
     {
@@ -62,7 +91,7 @@ class AdvertisementService implements AdvertisementServicesInterface
        return ['advertisement' => $resource, 'message' => 'Advertisement created successfully'];
     }
 
-    public function getAdsById($id): array
+    public function getAdvertisementById($id): array
     {
         $ad = $this->modelQuery()
             ->withCreator()
@@ -71,27 +100,13 @@ class AdvertisementService implements AdvertisementServicesInterface
             ->where('id', $id)
             ->selectedColumn()
             ->first();
+
         if($ad){
             return ['advertisement' => $ad, 'message' => 'Advertisement indexes successfully'];
         }
         else{
             throw new NotFoundHttpException("Advertisement for id (${id}) not found.");
         }
-    }
-    public function getAdsForSeller():array
-    {
-        $advertisements = $this->modelQuery()
-            ->where('user_id', auth()->id());
-        $advertisements->orderBy('views', 'desc')->get();
-
-        if($advertisements->count() == 0) {
-            $message = 'There is no Advertisements found for you yet.';
-            $advertisements = [];
-        }else{
-            $message = 'Advertisements indexed successfully.';
-            $advertisements = $advertisements->paginate(10);
-        }
-        return ['advertisement' => $advertisements, 'message' => $message];
     }
 
     /**
@@ -127,7 +142,6 @@ class AdvertisementService implements AdvertisementServicesInterface
         else{
             throw new NotFoundHttpException('Advertisement not found.');
         }
-
     }
 
     /**
@@ -178,4 +192,5 @@ class AdvertisementService implements AdvertisementServicesInterface
             throw new NotFoundHttpException('Advertisement not found.');
         }
     }
+
 }

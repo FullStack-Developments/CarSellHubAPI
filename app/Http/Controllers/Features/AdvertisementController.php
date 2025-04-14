@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Features;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Advertisements\FilterAdvertisementsRequest;
+use App\Http\Requests\Advertisements\FilterAdvertisementsAdminRequest;
+use App\Http\Requests\Advertisements\FilterAdvertisementsClientsRequest;
 use App\Http\Requests\Advertisements\StoreAdvertisementsRequest;
 use App\Http\Requests\Advertisements\UpdateAdvertisementsAdminRequest;
 use App\Http\Requests\Advertisements\UpdateAdvertisementsSellerRequest;
@@ -15,24 +16,26 @@ class AdvertisementController extends Controller
 {
     public function __construct(private readonly AdvertisementService $adService){}
 
-    public function index(FilterAdvertisementsRequest $request):JsonResponse
+    public function showAllAdsForClients(FilterAdvertisementsClientsRequest $request):JsonResponse
     {
         $response = $this->adService->filterAds($request);
         return $this->sendSuccess($response['ads'], $response['message']);
     }
-
+    public function showAllAdsForAdmin(FilterAdvertisementsAdminRequest $request):JsonResponse
+    {
+        $response = $this->adService->filterAllAdsForAdmin($request);
+        return $this->sendSuccess($response['ads'], $response['message']);
+    }
+    public function showAdsForSeller():JsonResponse{
+        $response = $this->adService->getAdsForSeller();
+        return $this->sendSuccess($response['advertisement'], $response['message']);
+    }
     public function store(StoreAdvertisementsRequest $request):JsonResponse{
         $response = $this->adService->createAd($request->validated());
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
-
-    public function showAdsById($id):JsonResponse{
-        $response = $this->adService->getAdsById($id);
-        return $this->sendSuccess($response['advertisement'], $response['message']);
-    }
-
-    public function showAdsForSeller():JsonResponse{
-        $response = $this->adService->getAdsForSeller();
+    public function showAdById($id):JsonResponse{
+        $response = $this->adService->getAdvertisementById($id);
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
 
@@ -55,7 +58,6 @@ class AdvertisementController extends Controller
     }
 
     //only admin can delete ads
-
     /**
      * @throws AuthorizationException
      */
