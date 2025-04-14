@@ -70,6 +70,7 @@ Route::group(['prefix' => 'home'], function (){
 
             Route::prefix('admin')->group(function () {
                 Route::post('/{id}', 'updateByAdmin')->name('advertisement.updateByAdmin');
+                Route::delete('/{id}', 'destroy')->name('advertisement.destroy');
             });
         });
     });

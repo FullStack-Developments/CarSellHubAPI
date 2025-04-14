@@ -55,5 +55,13 @@ class AdvertisementController extends Controller
     }
 
     //only admin can delete ads
-    public function destroy($id):void{}
+
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy($id):JsonResponse
+    {
+        $this->adService->deleteAd($id);
+        return $this->sendSuccess([],'Advertisement deleted successfully.');
+    }
 }

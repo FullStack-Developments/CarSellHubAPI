@@ -5,6 +5,7 @@ namespace App\Services\Features;
 use App\Http\Resources\AdvertisementsResource;
 use App\Interfaces\AdvertisementServicesInterface;
 use App\Models\Advertisement;
+use App\Models\CarImage;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
@@ -159,10 +160,22 @@ class AdvertisementService implements AdvertisementServicesInterface
 
     }
 
-    public function deleteAd($id): array
+    /**
+     * @throws AuthorizationException
+     */
+    public function deleteAd($id): void
     {
-        // TODO: Implement deleteAd() method.
+        $advertisement = $this->modelQuery()->where('id',$id)->first();
+        if(!is_null($advertisement)) {
+            if (Auth::user()->hasRole('admin')){
+                $advertisement->delete();
+            }
+            else{
+                throw new AuthorizationException();
+            }
+        }
+        else{
+            throw new NotFoundHttpException('Advertisement not found.');
+        }
     }
-
-
 }
