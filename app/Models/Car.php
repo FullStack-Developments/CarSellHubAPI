@@ -33,7 +33,7 @@ class Car extends Model
     public static function scopeWithUsersAndImages($query): void{
         $query->with([
             'user' => function ($query) {
-                $query->select('id', 'first_name', 'last_name', 'email', 'phone_number', 'address', 'picture_profile');
+                $query->select('id', 'first_name', 'last_name', 'email', 'phone_number');
             },
             'images' => function ($query) {
                 $query->select('car_id', 'first_image', 'second_image', 'third_image');

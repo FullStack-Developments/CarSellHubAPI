@@ -20,9 +20,16 @@ class AdService implements AdsServicesInterface
 
     public function filterAds($request): array
     {
-        $adBuilder = $this->modelQuery()->filter($request)->withCreator();
+        $adBuilder = $this->modelQuery()
+            ->withFilter($request)
+            ->withCreator()
+            ->isActive()
+            ->isApproved();
 
-        $adBuilder->latest()->get();
+        $adBuilder
+            ->select('user_id', 'full_name', 'image', 'link', 'location', 'hits', 'views', 'start_date', 'end_date')
+            ->orderBy('views', 'desc')
+            ->get();
 
         if($adBuilder->count() == 0) {
             $message = 'There is no Advertisements found.';

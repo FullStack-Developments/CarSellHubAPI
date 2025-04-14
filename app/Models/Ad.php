@@ -17,7 +17,7 @@ class Ad extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeFilter($query, $request): void
+    public function scopeWithFilter($query, $request): void
     {
         $query->when(
             $request->query('name'),
@@ -37,20 +37,21 @@ class Ad extends Model
         )->when(
             $request->query('max_views'),
             fn($query, $max_views) => $query->where('views', '<=' ,"$max_views")
-        )->when(
-            $request->query('status'),
-            fn($query, $status) => $query->where('status', $status)
-        )->when(
-            $request->query('is_active'),
-            fn($query, $is_active) => $query->where('is_active', $is_active)
         );
     }
 
     public function scopeWithCreator($query): void{
         $query->with([
             'user' => function($query){
-                $query->select('id', 'first_name', 'last_name', 'email', 'phone_number', 'address', 'picture_profile');
+                $query->select('id', 'first_name', 'last_name', 'email', 'phone_number');
             }
         ]);
     }
+    public function scopeIsActive($query):void{
+        $query->where('is_active', 1);
+    }
+    public function scopeIsApproved($query):void{
+        $query->where('status', 'approved');
+    }
+
 }

@@ -103,7 +103,7 @@ class CarSeeder extends Seeder
                 'description' => $car['description'],
             ]);
             $carModel->refresh();
-            $images = $this->storeImages([
+            $images = $this->storeImagesToStorage([
                 $car['first_image'],
                 $car['second_image'],
                 $car['third_image'],
@@ -116,7 +116,7 @@ class CarSeeder extends Seeder
             ]);
         }
     }
-    private function storeImages(array $images, $carId): array{
+    private function storeImagesToStorage(array $images, $carId): array{
         $uploadURLs = [];
         foreach ($images as $image) {
             $file = new File(public_path($image));

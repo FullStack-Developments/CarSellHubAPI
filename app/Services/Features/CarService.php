@@ -21,7 +21,9 @@ class CarService implements CarServicesInterface
     }
     public function filterCars($request) : array
     {
-        $carBuilder = $this->modelQuery()->filter($request);
+        $carBuilder = $this->modelQuery()
+            ->withFilter($request)
+            ->isActive();
 
         $carBuilder->withUsersAndImages()
             ->latest()
