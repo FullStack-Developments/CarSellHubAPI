@@ -144,7 +144,6 @@ class CarService implements CarServicesInterface
         }
 
     }
-
     public function getCarsForSeller():array
     {
         $cars = $this->modelQuery()

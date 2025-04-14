@@ -63,6 +63,12 @@ class Handler extends ExceptionHandler
             $status_code = HttpFoundationResponse::HTTP_NOT_FOUND;
             return $this->sendError($e->getMessage(), $status_code);
         }
+
+        if($e instanceof NotFoundHttpException){
+            $status_code = Response::HTTP_NOT_FOUND;
+            return $this->sendError($e->getMessage(), $status_code);
+        }
+
         if($e instanceof AuthorizationException) {
             $status_code = Response::HTTP_UNAUTHORIZED;
             return $this->sendError("You are not authorized to perform this action.",$status_code);
@@ -77,11 +83,6 @@ class Handler extends ExceptionHandler
             if($e instanceof ValidationException){
                 $status_code = Response::HTTP_UNPROCESSABLE_ENTITY;
                 return $this->sendValidationError($e->errors(), $status_code);
-            }
-
-            if($e instanceof NotFoundHttpException){
-                $status_code = Response::HTTP_NOT_FOUND;
-                return $this->sendError($e->getMessage(), $status_code);
             }
 
             if($e instanceof UnauthorizedException){

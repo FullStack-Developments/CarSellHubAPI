@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Ads;
+namespace App\Http\Requests\Advertisements;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class FilterAdsRequest extends FormRequest
+class UpdateAdvertisementsAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class FilterAdsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['nullable', 'string'],
-            'min_views' => ['nullable', 'integer'],
-            'max_views' => ['nullable', 'integer'],
+            'status' => [
+                'required',
+                Rule::in(['pending','approved', 'rejected']),
+            ],
         ];
     }
 }

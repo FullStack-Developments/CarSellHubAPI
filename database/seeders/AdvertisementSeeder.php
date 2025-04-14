@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ad;
+use App\Models\Advertisement;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\File;
@@ -99,7 +99,7 @@ class AdvertisementSeeder extends Seeder
         ];
         foreach ($ads as $ad) {
             $image = $this->storeImageToStorage($ad['image']);
-            Ad::query()->create([
+            Advertisement::query()->create([
                 'user_id' => $ad['user_id'],
                 'full_name' => $ad['full_name'],
                 'image' => $image,
@@ -117,7 +117,7 @@ class AdvertisementSeeder extends Seeder
     private function storeImageToStorage($image): string{
         $file = new File(public_path($image));
         $fileName = Str::uuid() . '_' . time() . '.' . $file->extension();
-        $filePath = Storage::disk('public')->putFileAs('advertisements', $file, $fileName);
+        $filePath = Storage::disk('public')->putFileAs('Advertisements', $file, $fileName);
         return URL::to('/') . '/storage/' . $filePath;
     }
 }

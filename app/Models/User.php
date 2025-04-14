@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
     public function ads(): HasMany{
-        return $this->hasMany(Ad::class);
+        return $this->hasMany(Advertisement::class);
     }
 
 }

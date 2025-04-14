@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Features\AdsController;
+use App\Http\Controllers\Features\AdvertisementController;
 use App\Http\Controllers\Features\CarController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,12 +48,13 @@ Route::group(['prefix' => 'home'], function (){
             });
             Route::prefix('admin')->group(function () {
                 Route::get('/', 'index')->name('cars.admin.index');
+                Route::post('/{id}', 'update')->name('cars.update');
                 Route::delete('/{id}', 'destroy')->name('cars.destroy');
             });
         });
     });
 
-    Route::controller(AdsController::class)->prefix('advertisements')->group(function () {
+    Route::controller(AdvertisementController::class)->prefix('advertisements')->group(function () {
         Route::prefix('client')->group(function () {
             Route::get('/', 'index')
                 ->name('advertisement.index');
@@ -64,11 +65,11 @@ Route::group(['prefix' => 'home'], function (){
             Route::prefix('seller')->group(function () {
                 Route::get('/', 'showAdsForSeller')->name('advertisement.showAdsForSeller'); //show ads for auth seller
                 Route::post('/', 'store')->name('advertisement.store');
-
+                Route::post('/{id}', 'updateBySeller')->name('advertisement.updateBySeller');
             });
 
             Route::prefix('admin')->group(function () {
-                // update, delete ads
+                Route::post('/{id}', 'updateByAdmin')->name('advertisement.updateByAdmin');
             });
         });
     });

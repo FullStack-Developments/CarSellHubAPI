@@ -29,7 +29,7 @@ class RolesPermissionsSeeder extends Seeder
 
         $sellerRole->givePermissionTo([
             'car.index', 'car.store', 'car.update',
-            'advertisement.index', 'advertisement.store'
+            'advertisement.index', 'advertisement.store', 'advertisement.update'
         ]);
 
         $adminUser = User::factory()->create([
