@@ -9,6 +9,8 @@ interface AdsServicesInterface
     public function filterAds($request):array;
     public function createAd($request):array;
     public function getAdsById($id):array;
+
+    public function getAdsForSeller():array;
     public function updateAd($request, $id):array;
     public function deleteAd($id):array;
 }

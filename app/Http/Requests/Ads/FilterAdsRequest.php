@@ -25,12 +25,8 @@ class FilterAdsRequest extends FormRequest
     {
         return [
             'name' => ['nullable', 'string'],
-            'min_hits' => ['nullable', 'integer', 'min:0'],
-            'max_hits' => ['nullable', 'integer', 'min:0'],
             'min_views' => ['nullable', 'integer'],
             'max_views' => ['nullable', 'integer'],
-//            'is_active' => ['nullable', 'boolean'],
-//            'status' => ['nullable', 'string', Rule::in(['pending', 'approved', 'rejected'])],
         ];
     }
 }

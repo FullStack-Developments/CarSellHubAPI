@@ -26,12 +26,6 @@ class Ad extends Model
             $request->query('location'),
             fn($query, $location) => $query->where('location', 'LIKE' ,"%$location%")
         )->when(
-            $request->query('min_hits'),
-            fn($query, $min_hits) => $query->where('hits', '>=' ,"$min_hits")
-        )->when(
-            $request->query('max_hits'),
-            fn($query, $max_hits) => $query->where('hits', '<=' ,"$max_hits")
-        )->when(
             $request->query('min_views'),
             fn($query, $min_views) => $query->where('views', '>=' ,"$min_views")
         )->when(
@@ -53,5 +47,7 @@ class Ad extends Model
     public function scopeIsApproved($query):void{
         $query->where('status', 'approved');
     }
-
+    public function scopeSelectedColumn($query):void{
+        $query->select('user_id', 'full_name', 'image', 'link', 'location', 'hits', 'views', 'start_date', 'end_date');
+    }
 }

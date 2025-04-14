@@ -27,7 +27,7 @@ class AdService implements AdsServicesInterface
             ->isApproved();
 
         $adBuilder
-            ->select('user_id', 'full_name', 'image', 'link', 'location', 'hits', 'views', 'start_date', 'end_date')
+            ->selectedColumn()
             ->orderBy('views', 'desc')
             ->get();
 
@@ -64,7 +64,10 @@ class AdService implements AdsServicesInterface
     {
         $ad = $this->modelQuery()
             ->withCreator()
+            ->isActive()
+            ->isApproved()
             ->where('id', $id)
+            ->selectedColumn()
             ->first();
         if($ad){
             return ['advertisement' => $ad, 'message' => 'Advertisement indexes successfully'];
@@ -73,6 +76,22 @@ class AdService implements AdsServicesInterface
             throw new NotFoundHttpException("Advertisement for id (${id}) not found.");
         }
     }
+    public function getAdsForSeller():array
+    {
+        $advertisements = $this->modelQuery()
+            ->where('user_id', auth()->id());
+        $advertisements->orderBy('views', 'desc')->get();
+
+        if($advertisements->count() == 0) {
+            $message = 'There is no Advertisements found for you yet.';
+            $advertisements = [];
+        }else{
+            $message = 'Advertisements indexed successfully.';
+            $advertisements = $advertisements->paginate(10);
+        }
+        return ['advertisement' => $advertisements, 'message' => $message];
+    }
+
 
     public function updateAd($request, $id): array
     {

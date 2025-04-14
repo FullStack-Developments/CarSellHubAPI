@@ -14,5 +14,6 @@ interface CarServicesInterface
     public function getCarById(int $id): array ;
     public function getCarBrands(): array ;
     public function getCarsBySellerName(string $sellerName): array;
+    public function getCarsForSeller():array;
 }
 

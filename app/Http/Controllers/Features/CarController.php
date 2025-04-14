@@ -25,7 +25,7 @@ class CarController extends Controller
         $response = $this->carServices->storeCar($request);
         return $this->sendSuccess($response['car'], $response['message']);
     }
-    public function show(int $id): JsonResponse{
+    public function showCarsById(int $id): JsonResponse{
         $response = $this->carServices->getCarById($id);
         return $this->sendSuccess($response['car'], $response['message']);
     }
@@ -55,4 +55,9 @@ class CarController extends Controller
         $response = $this->carServices->getCarsBySellerName($sellerName);
         return $this->sendSuccess($response['cars'], $response['message']);
     }
+    public function showCarsForSeller(): JsonResponse{
+        $response = $this->carServices->getCarsForSeller();
+        return $this->sendSuccess($response['cars'], $response['message']);
+    }
+
 }

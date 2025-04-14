@@ -23,8 +23,13 @@ class AdsController extends Controller
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
 
-    public function show($id):JsonResponse{
+    public function showAdsById($id):JsonResponse{
         $response = $this->adService->getAdsById($id);
+        return $this->sendSuccess($response['advertisement'], $response['message']);
+    }
+
+    public function showAdsForSeller():JsonResponse{
+        $response = $this->adService->getAdsForSeller();
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
 

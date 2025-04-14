@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services\Features;
-use App\Http\Resources\CarResource;
 use App\Interfaces\CarServicesInterface;
 use App\Models\Car;
 use App\Models\CarImage;
@@ -10,7 +9,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function PHPUnit\Framework\isEmpty;
 
 class CarService implements CarServicesInterface
 {
@@ -22,8 +20,7 @@ class CarService implements CarServicesInterface
     public function filterCars($request) : array
     {
         $carBuilder = $this->modelQuery()
-            ->withFilter($request)
-            ->isActive();
+            ->withFilter($request);
 
         $carBuilder->withUsersAndImages()
             ->latest()
@@ -135,6 +132,7 @@ class CarService implements CarServicesInterface
         }
     }
     public function getCarsBySellerName(string $sellerName): array{
+
         $cars = $this->modelQuery()
             ->bySellerName($sellerName)
             ->paginate(10);
@@ -145,6 +143,22 @@ class CarService implements CarServicesInterface
             throw new NotFoundHttpException('There is no cars for seller name at the moment.');
         }
 
+    }
+
+    public function getCarsForSeller():array
+    {
+        $cars = $this->modelQuery()
+            ->where('user_id', auth()->id());
+        $cars->latest()->get();
+
+        if($cars->count() == 0) {
+            $message = 'There is no Cars found for you yet.';
+            $cars = [];
+        }else{
+            $message = 'Cars indexed successfully.';
+            $cars = $cars->paginate(10);
+        }
+        return ['cars' => $cars, 'message' => $message];
     }
     private function createCar($request) : Car {
         return Car::create([
