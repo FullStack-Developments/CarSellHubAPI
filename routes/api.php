@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Features\AdvertisementController;
 use App\Http\Controllers\Features\CarController;
+use App\Http\Controllers\Features\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -84,6 +85,18 @@ Route::group(['prefix' => 'home'], function (){
             Route::get('/', 'showAdsForSeller')->name('seller.advertisement.showAdsForSeller'); //show ads for auth seller
             Route::post('/', 'store')->name('seller.advertisement.store');
             Route::post('/{id}', 'updateBySeller')->name('seller.advertisement.updateBySeller');
+        });
+    });
+
+    Route::controller(ReviewController::class)->prefix('reviews')->group(function () {
+        Route::get('/', 'indexPublicReviews')->name('reviews.index-public-reviews');
+        Route::post('/','store')->name('reviews.store');
+        Route::get('car/{carId}','indexReviewsByCarId')->name('reviews.index-reviews-by-carId');
+
+        Route::prefix('client')->group(function () {
+        });
+        Route::prefix('seller')->middleware('auth:sanctum')->group(function () {
+            Route::get('/', 'showPublicReviews')->name('client.reviews.seller');
         });
     });
 });

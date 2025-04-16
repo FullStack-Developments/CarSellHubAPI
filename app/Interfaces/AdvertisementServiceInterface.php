@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 use Illuminate\Database\Eloquent\Builder;
 
-interface AdvertisementServicesInterface
+interface AdvertisementServiceInterface
 {
     public function modelQuery():Builder;
     public function filterAds($request):array;

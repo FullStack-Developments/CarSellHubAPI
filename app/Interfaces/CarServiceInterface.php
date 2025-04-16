@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 use Illuminate\Database\Eloquent\Builder;
 
-interface CarServicesInterface
+interface CarServiceInterface
 {
     public function modelQuery():Builder;
     public function filterCars($request):array ;

@@ -10,13 +10,30 @@ class Review extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'car_id', 'username', 'phone_number',
-        'is_public', 'comment', 'status',
-    ];
-
+    protected $guarded = [];
+    protected $hidden = ['id', 'car_id'];
     public function car() : BelongsTo
     {
         return $this->belongsTo(Car::class, 'car_id');
+    }
+
+    public function scopeIsPublic($query):void{
+        $query->where('is_public', true);
+    }
+    public function scopeIsApproved($query):void{
+        $query->where('status', 'approved');
+    }
+    public function scopeSelectColumns($query):void{
+        $query->select('car_id','full_name','phone_number','email', 'subject', 'comment','created_at');
+    }
+
+    public function scopeWithCarInfos($query):void{
+        $query->with(['car' => function ($query) {
+            $query->select(['id' ,'user_id', 'brand', 'model', 'manufacture_year'])
+            ->with([
+                'images' => fn($query) => $query->select(['car_id', 'first_image']),
+//                'user' => fn($query) => $query->select(['id', 'first_name', 'last_name', 'email','phone_number']),
+            ]);
+        }]);
     }
 }

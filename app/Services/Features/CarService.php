@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Features;
-use App\Interfaces\CarServicesInterface;
+use App\Interfaces\CarServiceInterface;
 use App\Models\Car;
 use App\Models\CarImage;
 use App\Traits\ManageFilesTrait;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CarService implements CarServicesInterface
+class CarService implements CarServiceInterface
 {
     use ManageFilesTrait;
     public function modelQuery(): Builder

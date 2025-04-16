@@ -3,7 +3,7 @@
 namespace App\Services\Features;
 
 use App\Http\Resources\AdvertisementsResource;
-use App\Interfaces\AdvertisementServicesInterface;
+use App\Interfaces\AdvertisementServiceInterface;
 use App\Models\Advertisement;
 use App\Traits\ManageFilesTrait;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AdvertisementService implements AdvertisementServicesInterface
+class AdvertisementService implements AdvertisementServiceInterface
 {
 
     use ManageFilesTrait;

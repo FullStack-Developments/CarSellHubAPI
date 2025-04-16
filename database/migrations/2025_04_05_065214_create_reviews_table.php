@@ -18,10 +18,12 @@ return new class extends Migration
                 ->constrained('cars')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-            $table->string('username');
+            $table->string('full_name');
             $table->string('phone_number');
+            $table->string('email');
+            $table->string('subject');
+            $table->text('comment');
             $table->boolean('is_public')->default(false);
-            $table->string('comment');
             $table->enum('status', ['pending', 'approved', 'rejected'])
                 ->default('pending');
             $table->timestamps();
