@@ -7,6 +7,7 @@ use App\Interfaces\ReviewServiceInterface;
 use App\Models\Car;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReviewService implements ReviewServiceInterface
@@ -79,11 +80,27 @@ class ReviewService implements ReviewServiceInterface
         }
     }
 
-    public function showReviewsAboutSellerCars(){
-    $review = $this->modelQuery()
-    ->whereHas('car', function (Builder $query) {
-
-    });
+    /**
+     * @return array
+     */
+    public function showReviewsForCarSeller(): array
+    {
+        $user_id  = Auth::id();
+        $review = $this->modelQuery()
+            ->whereHas('car', function (Builder $query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })
+            ->isApproved()
+            ->withCarInfos()
+            ->paginate(10);
+        if($review->count() == 0) {
+            $message = 'There is no reviews for this car yet.';
+            $review = [];
+            $code = 404;
+        }else{
+            $code = 200;
+            $message = 'Reviews indexes successfully!';
+        }
+        return ['review' => $review, 'message' => $message, 'code' => $code];
     }
-
 }

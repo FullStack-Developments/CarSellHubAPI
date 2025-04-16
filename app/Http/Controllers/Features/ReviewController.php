@@ -24,4 +24,8 @@ class ReviewController extends Controller
         $response = $this->reviewService->showReviewsByCarId($carId);
         return $this->sendSuccess($response['review'], $response['message'], $response['code']);
     }
+    public function indexReviewsForCarSeller():JsonResponse{
+        $response = $this->reviewService->showReviewsForCarSeller();
+        return $this->sendSuccess($response['review'], $response['message'], $response['code']);
+    }
 }

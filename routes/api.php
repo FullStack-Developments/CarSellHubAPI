@@ -91,12 +91,10 @@ Route::group(['prefix' => 'home'], function (){
     Route::controller(ReviewController::class)->prefix('reviews')->group(function () {
         Route::get('/', 'indexPublicReviews')->name('reviews.index-public-reviews');
         Route::post('/','store')->name('reviews.store');
-        Route::get('car/{carId}','indexReviewsByCarId')->name('reviews.index-reviews-by-carId');
+        Route::get('/car/{carId}','indexReviewsByCarId')->name('reviews.index-reviews-by-carId');
 
-        Route::prefix('client')->group(function () {
-        });
         Route::prefix('seller')->middleware('auth:sanctum')->group(function () {
-            Route::get('/', 'showPublicReviews')->name('client.reviews.seller');
+            Route::get('/', 'indexReviewsForCarSeller')->name('seller.reviews.index-reviews-for-car-seller');
         });
     });
 });

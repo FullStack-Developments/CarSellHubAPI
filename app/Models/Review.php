@@ -29,10 +29,9 @@ class Review extends Model
 
     public function scopeWithCarInfos($query):void{
         $query->with(['car' => function ($query) {
-            $query->select(['id' ,'user_id', 'brand', 'model', 'manufacture_year'])
+            $query->select(['id' ,'user_id', 'brand', 'model', 'manufacture_year', 'description'])
             ->with([
                 'images' => fn($query) => $query->select(['car_id', 'first_image']),
-//                'user' => fn($query) => $query->select(['id', 'first_name', 'last_name', 'email','phone_number']),
             ]);
         }]);
     }
