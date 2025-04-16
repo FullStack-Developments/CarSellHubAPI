@@ -94,7 +94,7 @@ Route::group(['prefix' => 'home'], function (){
         Route::get('/car/{carId}','indexReviewsByCarId')->name('reviews.index-reviews-by-carId');
 
         Route::prefix('seller')->middleware('auth:sanctum')->group(function () {
-            Route::get('/', 'indexReviewsForCarSeller')->name('seller.reviews.index-reviews-for-car-seller');
+            Route::get('/', 'indexReviewsByCarSeller')->name('seller.reviews.index-reviews-by-car-seller');
         });
     });
 });

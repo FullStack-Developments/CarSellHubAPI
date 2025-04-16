@@ -10,5 +10,5 @@ interface ReviewServiceInterface
     public function showPublicReviews():array;
     public function createReview($request):array;
     public function showReviewsByCarId($carId):array;
-    public function showReviewsForCarSeller():array;
+    public function showReviewsByCarSeller():array;
 }

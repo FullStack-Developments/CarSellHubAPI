@@ -83,21 +83,19 @@ class ReviewService implements ReviewServiceInterface
     /**
      * @return array
      */
-    public function showReviewsForCarSeller(): array
+    public function showReviewsByCarSeller(): array
     {
-        $user_id  = Auth::id();
         $review = $this->modelQuery()
-            ->whereHas('car', function (Builder $query) use ($user_id) {
-                $query->where('user_id', $user_id);
-            })
+            ->reviewsByUser()
             ->isApproved()
             ->withCarInfos()
             ->paginate(10);
+
         if($review->count() == 0) {
-            $message = 'There is no reviews for this car yet.';
+            $message = 'There is no reviews for your cars.';
             $review = [];
             $code = 404;
-        }else{
+        }else {
             $code = 200;
             $message = 'Reviews indexes successfully!';
         }

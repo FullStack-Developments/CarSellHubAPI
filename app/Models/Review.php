@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class Review extends Model
 {
@@ -34,5 +36,13 @@ class Review extends Model
                 'images' => fn($query) => $query->select(['car_id', 'first_image']),
             ]);
         }]);
+    }
+
+    public function scopeReviewsByUser($query):void
+    {
+        $user_id =  Auth::id();
+        $query->whereHas('car', function (Builder $query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        });
     }
 }
