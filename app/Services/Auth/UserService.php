@@ -7,7 +7,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\ManageFilesTrait;
 use App\Traits\OtpTokenTrait;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\UnauthorizedException;
@@ -71,11 +70,10 @@ class UserService
         ];
     }
 
+
     /**
      * @param $request
      * @return array
-     * @throws NotFoundHttpException
-     * @throws UnauthorizedException
      */
     public function loginUser($request): array{
         $identifier = filter_var(
@@ -113,7 +111,7 @@ class UserService
     }
 
     /**
-     * @throws AuthenticationException
+     * @return array
      */
     public function logoutUser(): array{
         $user = request()->user();
@@ -148,5 +146,4 @@ class UserService
 
         return $user;
     }
-
 }

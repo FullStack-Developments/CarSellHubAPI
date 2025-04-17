@@ -9,10 +9,8 @@ class Setting extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'website_name', 'website_icon', 'website_logo',
-        'facebook_url', 'twitter_url', 'linkedin_url',
-        'instagram_url', 'whatsapp_url', 'intro_images',
-        'intro_keywords', 'language'
-    ];
+    protected $table = 'settings';
+    protected $guarded = [];
+    protected $hidden = ['id','created_at', 'updated_at'];
+
 }

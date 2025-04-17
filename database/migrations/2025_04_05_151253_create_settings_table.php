@@ -21,9 +21,12 @@ return new class extends Migration
             $table->string('linkedin_url')->nullable();
             $table->string('instagram_url')->nullable();
             $table->string('whatsapp_url')->nullable();
-            $table->string('intro_images');
-            $table->string('intro_keywords');
-            $table->enum('language', ['en', 'ar']);
+            $table->string('contact_email');
+            $table->string('contact_phone');
+            $table->json('intro_images');
+            $table->json('intro_keywords');
+            $table->text('site_description');
+            $table->enum('language', ['en', 'ar'])->default('en');
             $table->timestamps();
         });
     }

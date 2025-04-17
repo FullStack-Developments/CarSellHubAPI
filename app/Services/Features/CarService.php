@@ -13,10 +13,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class CarService implements CarServiceInterface
 {
     use ManageFilesTrait;
+
+    /**
+     * @return Builder
+     */
     public function modelQuery(): Builder
     {
         return Car::query();
     }
+
+    /**
+     * @param $request
+     * @return array
+     */
     public function filterCars($request) : array
     {
         $carBuilder = $this->modelQuery()
@@ -35,6 +44,11 @@ class CarService implements CarServiceInterface
         }
         return ['cars' => $carBuilder, 'message' => $message];
     }
+
+    /**
+     * @param $request
+     * @return array
+     */
     public function storeCar($request) : array
     {
         $car = $this->createCar($request);
@@ -108,6 +122,11 @@ class CarService implements CarServiceInterface
             throw new NotFoundHttpException('Car not found.');
         }
     }
+
+    /**
+     * @param int $id
+     * @return array
+     */
     public function getCarById(int $id): array {
         $car = $this->modelQuery()->where('id', $id)->first();
         if(!is_null($car)){
@@ -119,6 +138,10 @@ class CarService implements CarServiceInterface
             throw new NotFoundHttpException('Car not found.');
         }
     }
+
+    /**
+     * @return array
+     */
     public function getCarBrands(): array
     {
         $car_brands = $this->modelQuery()
@@ -133,6 +156,11 @@ class CarService implements CarServiceInterface
             throw new NotFoundHttpException('There is no car brands available at the moment.');
         }
     }
+
+    /**
+     * @param string $sellerName
+     * @return array
+     */
     public function getCarsBySellerName(string $sellerName): array
     {
         $cars = $this->modelQuery()
@@ -147,6 +175,10 @@ class CarService implements CarServiceInterface
         }
 
     }
+
+    /**
+     * @return array
+     */
     public function getCarsForSeller():array
     {
         $cars = $this->modelQuery()
@@ -162,6 +194,11 @@ class CarService implements CarServiceInterface
         }
         return ['cars' => $cars, 'message' => $message];
     }
+
+    /**
+     * @param $request
+     * @return Car
+     */
     private function createCar($request) : Car {
         return Car::create([
             'user_id' => Auth::id(),
@@ -178,6 +215,12 @@ class CarService implements CarServiceInterface
         ]);
 
     }
+
+    /**
+     * @param $carId
+     * @param $images
+     * @return void
+     */
     private function createCarImage($carId, $images) : void{
         CarImage::create([
             'car_id' => $carId,
@@ -186,6 +229,12 @@ class CarService implements CarServiceInterface
             'third_image' => $images[2],
         ]);
     }
+
+    /**
+     * @param $request
+     * @param $id
+     * @return void
+     */
     private function updateCar($request, $id):void {
         $car = $this->modelQuery()
             ->where('id', $id)
@@ -203,6 +252,12 @@ class CarService implements CarServiceInterface
             'description' => $request['description'] ?? $car['description'],
         ]);
     }
+
+    /**
+     * @param $request
+     * @param $carId
+     * @return void
+     */
     private function updateCarImage($request, $carId):void {
         $carImages = CarImage::query()
             ->where('car_id', $carId)
@@ -216,6 +271,12 @@ class CarService implements CarServiceInterface
                 'third_image' => $images[2],
             ]);
     }
+
+    /**
+     * @param $request
+     * @param $carImages
+     * @return array
+     */
     private function deleteAndRestoreNewImages($request, $carImages): array{
         $images_path = "cars/{$carImages['id']}";
         $images[0] = $carImages->first_image;
@@ -239,5 +300,4 @@ class CarService implements CarServiceInterface
         }
         return $images;
     }
-
 }

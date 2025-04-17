@@ -15,10 +15,19 @@ class AdvertisementService implements AdvertisementServiceInterface
 {
 
     use ManageFilesTrait;
+
+    /**
+     * @return Builder
+     */
     public function modelQuery(): Builder
     {
         return Advertisement::query();
     }
+
+    /**
+     * @param $request
+     * @return array
+     */
     public function filterAds($request): array
     {
         $adBuilder = $this->modelQuery()
@@ -41,6 +50,10 @@ class AdvertisementService implements AdvertisementServiceInterface
         return ['ads' => $adBuilder, 'message' => $message];
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function filterAllAdsForAdmin($request):array{
         $adBuilder = $this->modelQuery()
             ->withFilter($request)
@@ -55,6 +68,10 @@ class AdvertisementService implements AdvertisementServiceInterface
         }
         return ['ads' => $adBuilder, 'message' => $message];
     }
+
+    /**
+     * @return array
+     */
     public function getAdsForSeller():array
     {
         $advertisements = $this->modelQuery()
@@ -71,9 +88,13 @@ class AdvertisementService implements AdvertisementServiceInterface
         return ['advertisement' => $advertisements, 'message' => $message];
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     public function createAd($request): array
     {
-        $ads_image_path = "Advertisements";
+        $ads_image_path = "advertisements";
         $image = $this->uploadImageToStorage([$request['image']], $ads_image_path);
 
        $advertisement = $this->modelQuery()
@@ -119,7 +140,7 @@ class AdvertisementService implements AdvertisementServiceInterface
             if ((Auth::user()->hasRole('seller') && Auth::id() == $advertisement['user_id'])) {
                  if($request->hasFile('image')){
                      $this->deleteImageFromStorage([$advertisement['image']]);
-                     $image = $this->uploadImageToStorage([$request['image']], 'Advertisements');
+                     $image = $this->uploadImageToStorage([$request['image']], 'advertisements');
                  }
                 $this->modelQuery()
                     ->where('id', $id)

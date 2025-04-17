@@ -117,7 +117,7 @@ class AdvertisementSeeder extends Seeder
     private function storeImageToStorage($image): string{
         $file = new File(public_path($image));
         $fileName = Str::uuid() . '_' . time() . '.' . $file->extension();
-        $filePath = Storage::disk('public')->putFileAs('Advertisements', $file, $fileName);
+        $filePath = Storage::disk('public')->putFileAs('advertisements', $file, $fileName);
         return URL::to('/') . '/storage/' . $filePath;
     }
 }

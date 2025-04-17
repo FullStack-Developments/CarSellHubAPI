@@ -14,6 +14,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 class ResetPasswordService
 {
     use OtpTokenTrait;
+
+    /**
+     * @param $request
+     * @return void
+     */
     public function forgetPassword($request) : void
     {
         $user = User::query()
@@ -24,8 +29,10 @@ class ResetPasswordService
     }
 
     /**
-     * @throws SameOldPasswordException
+     * @param $request
+     * @return void
      * @throws InvalidArgumentException
+     * @throws SameOldPasswordException
      */
     public function resetPassword($request): void
     {

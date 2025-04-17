@@ -14,7 +14,10 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 class EmailVerificationService
 {
     use OtpTokenTrait;
+
     /**
+     * @param $request
+     * @return void
      * @throws InvalidArgumentException
      */
     public function verify($request): void
@@ -35,6 +38,8 @@ class EmailVerificationService
     }
 
     /**
+     * @param $request
+     * @return void
      * @throws InvalidArgumentException
      */
     public function resend($request): void

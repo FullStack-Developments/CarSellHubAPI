@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             RolesPermissionsSeeder::class,
             CarSeeder::class,
             AdvertisementSeeder::class,
+            SettingsSeeder::class,
         ]);
     }
 }
