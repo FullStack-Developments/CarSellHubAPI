@@ -40,10 +40,10 @@ class SettingsSeeder extends Seeder
         ]];
 
         $image_icon = $this->storeImagesToStorage($setting[0]['website_icon'],'icons' );
-        $image_logo = $this->storeImagesToStorage($setting[0]['website_logo'],'logo' );
+        $image_logo = $this->storeImagesToStorage($setting[0]['website_logo'],'logos' );
         $intros = [];
         foreach($setting[0]['intro_images'] as $intro){
-          $intros[] = $this->storeImagesToStorage($intro,'intro_images');
+          $intros[] = $this->storeImagesToStorage($intro,'intros');
         }
 
         Setting::query()->create([

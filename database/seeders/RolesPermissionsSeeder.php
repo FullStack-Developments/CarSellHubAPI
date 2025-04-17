@@ -19,7 +19,8 @@ class RolesPermissionsSeeder extends Seeder
         $permissions = [
             'car.index', 'car.store', 'car.update', 'car.destroy',
             'advertisement.index', 'advertisement.store', 'advertisement.update', 'advertisement.destroy',
-            'review.update', 'review.destroy'
+            'review.update', 'review.destroy',
+            'setting.store', 'setting.update', 'setting.destroy',
         ];
 
         foreach ($permissions as $permission) {

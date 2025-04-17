@@ -95,7 +95,7 @@ class AdvertisementService implements AdvertisementServiceInterface
     public function createAd($request): array
     {
         $ads_image_path = "advertisements";
-        $image = $this->uploadImageToStorage([$request['image']], $ads_image_path);
+        $image = $this->uploadImageToStorage([$request->file('image')], $ads_image_path);
 
        $advertisement = $this->modelQuery()
             ->create([

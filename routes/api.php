@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Features\AdvertisementController;
 use App\Http\Controllers\Features\CarController;
 use App\Http\Controllers\Features\ReviewController;
+use App\Http\Controllers\Features\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -61,10 +62,22 @@ Route::prefix('admin')
             Route::post('/{id}','updateReview')->name('admin.review.update');
             Route::delete('/{id}','destroyReview')->name('admin.review.destroy');
         });
+
+    Route::controller(SettingController::class)
+        ->prefix('settings')
+        ->group(function () {
+            Route::get('/', 'index')->name('admin.settings.index');
+            Route::post('/', 'store')->name('admin.settings.store');
+            Route::post('/{id}', 'update')->name('admin.settings.update');
+        });
 });
 
 // feature Routes for sellers and clients
 Route::group(['prefix' => 'home'], function (){
+    Route::controller(SettingController::class)->group(function (){
+        Route::get('/', 'index')->name('home.index');
+    });
+
     Route::controller(CarController::class)->prefix('cars')->group(function () {
         Route::prefix('client')->group(function () {
             Route::get('/', 'index')->name('client.cars.index');
