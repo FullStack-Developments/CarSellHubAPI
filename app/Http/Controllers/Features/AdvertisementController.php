@@ -57,6 +57,11 @@ class AdvertisementController extends Controller
         return $this->sendSuccess($response['advertisement'], $response['message']);
     }
 
+    public function increaseHitAdvertisement($id):JsonResponse{
+        $response = $this->adService->increaseHitsByClickedOnAd($id);
+        return $this->sendSuccess($response['advertisement'], $response['message']);
+    }
+
     //only admin can delete ads
     /**
      * @throws AuthorizationException

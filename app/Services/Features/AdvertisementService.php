@@ -193,4 +193,23 @@ class AdvertisementService implements AdvertisementServiceInterface
         }
     }
 
+    /**
+     * @param $id
+     * @return array
+     */
+    public function increaseHitsByClickedOnAd($id): array
+    {
+        $advertisement = $this->modelQuery()
+            ->where('id',$id)
+            ->first();
+        if(!is_null($advertisement)) {
+            $advertisement->hits = $advertisement->hits + 1;
+            $advertisement->views = $advertisement->views + 1;
+            $advertisement->save();
+            return ['advertisement' => $advertisement, 'message' => 'Hits and views increased by clicked on image or link Advertisement'];
+        }
+        else{
+            throw new NotFoundHttpException('The advertisement for id ('.$id.') is not found.');
+        }
+    }
 }

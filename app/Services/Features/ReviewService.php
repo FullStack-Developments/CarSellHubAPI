@@ -6,16 +6,24 @@ use App\Http\Resources\ReviewResource;
 use App\Interfaces\ReviewServiceInterface;
 use App\Models\Car;
 use App\Models\Review;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReviewService implements ReviewServiceInterface
 {
+    /**
+     * @return Builder
+     */
     public function modelQuery(): Builder
     {
         return Review::query();
     }
+
+    /**
+     * @return array
+     */
     public function showPublicReviews(): array
     {
         $review = $this->modelQuery()
@@ -37,6 +45,11 @@ class ReviewService implements ReviewServiceInterface
         }
         return ['review' => $review, 'message' => $message, 'code' => $code];
     }
+
+    /**
+     * @param $request
+     * @return array
+     */
     public function createReview($request): array
     {
         $review = $this->modelQuery()
@@ -53,6 +66,11 @@ class ReviewService implements ReviewServiceInterface
         $message = 'Review created successfully!';
         return ['review' => $review, 'message' => $message];
     }
+
+    /**
+     * @param $carId
+     * @return array
+     */
     public function showReviewsByCarId($carId):array{
         $car = Car::query()->find($carId);
         if(!is_null($car)){
@@ -100,5 +118,51 @@ class ReviewService implements ReviewServiceInterface
             $message = 'Reviews indexes successfully!';
         }
         return ['review' => $review, 'message' => $message, 'code' => $code];
+    }
+
+    /**
+     * @param $request
+     * @param $id
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function updateReview($request, $id): array
+    {
+        $review = $this->modelQuery()->where('id', $id)->first();
+        if(!is_null($review)){
+            $review->is_public = $request['is_public'] ?? $review->is_public;
+            $review->status = $request['status'] ?? $review->status;
+            $review->save();
+            return ['review' => $review, 'message' => 'Review updated successfully!'];
+        }else{
+            throw new NotFoundHttpException('The review for id ('.$id.') is not found ');
+        }
+    }
+
+
+    /**
+     * @param $id
+     * @return array
+     * @throws AuthorizationException
+     * @throws NotFoundHttpException
+     */
+    public function deleteReview($id): array
+    {
+        $review = $this->modelQuery()
+            ->where('id', $id)
+            ->first();
+        if(!is_null($review)){
+            if (Auth::user()->hasRole('admin')){
+                $review->delete();
+                $message = 'Review deleted successfully!';
+                return ['review' => [], 'message' => $message];
+            }
+            else{
+                throw new AuthorizationException();
+            }
+        }
+        else{
+            throw new NotFoundHttpException('The review for id ('.$id.') is not found ');
+        }
     }
 }

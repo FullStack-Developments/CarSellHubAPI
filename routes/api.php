@@ -54,6 +54,13 @@ Route::prefix('admin')
             Route::post('/{id}', 'updateByAdmin')->name('admin.advertisement.updateByAdmin');
             Route::delete('/{id}', 'destroy')->name('admin.advertisement.destroy');
         });
+
+    Route::controller(ReviewController::class)
+        ->prefix('reviews')
+        ->group(function () {
+            Route::post('/{id}','updateReview')->name('admin.review.update');
+            Route::delete('/{id}','destroyReview')->name('admin.review.destroy');
+        });
 });
 
 // feature Routes for sellers and clients
@@ -76,6 +83,7 @@ Route::group(['prefix' => 'home'], function (){
     });
 
     Route::controller(AdvertisementController::class)->prefix('advertisements')->group(function () {
+        Route::put('/{id}','increaseHitAdvertisement')->name('advertisement.increase-hit-advertisement');
         Route::prefix('client')->group(function () {
             Route::get('/', 'showAllAdsForClients')->name('client.advertisement.index');
             Route::get('/{id}', 'showAdById')->name('client.advertisement.showAdById');
@@ -90,7 +98,7 @@ Route::group(['prefix' => 'home'], function (){
 
     Route::controller(ReviewController::class)->prefix('reviews')->group(function () {
         Route::get('/', 'indexPublicReviews')->name('reviews.index-public-reviews');
-        Route::post('/','store')->name('reviews.store');
+        Route::post('/','storeReview')->name('reviews.store');
         Route::get('/car/{carId}','indexReviewsByCarId')->name('reviews.index-reviews-by-carId');
 
         Route::prefix('seller')->middleware('auth:sanctum')->group(function () {
